@@ -178,16 +178,7 @@ jobs:
       - name: 📤 Upload Platform Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact_name }}-build-${{ github.run_number }}
-          path: QA_Generator_${{ matrix.platform }}/
-          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
-          if-no-files-found: warn
-
-      - name: 📤 Upload Compressed Archive
-        uses: actions/upload-artifact@v4
-        if: success() || failure()
-        with:
-          name: ${{ matrix.artifact_name }}-Archive-${{ github.run_number }}
+          name: ${{ matrix.artifact_name }}-${{ github.run_number }}
           path: QA-Generator-${{ matrix.platform }}-v1.0.0-build-${{ github.run_number }}.*
           retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
           if-no-files-found: warn
@@ -199,7 +190,7 @@ jobs:
           if [ "${{ steps.electron-build.outcome }}" = "failure" ]; then
             echo "## ❌ ${{ matrix.platform }} Build Failed!" >> $GITHUB_STEP_SUMMARY
             echo "- 🚨 **Status**: Build failed for ${{ matrix.platform }}" >> $GITHUB_STEP_SUMMARY
-            echo "- 📦 **Artifact**: ${{ matrix.artifact_name }}-build-${{ github.run_number }} (contains error info)" >> $GITHUB_STEP_SUMMARY
+            echo "- 📦 **Artifact**: ${{ matrix.artifact_name }}-${{ github.run_number }} (contains error info)" >> $GITHUB_STEP_SUMMARY
             echo "- 💻 **Platform**: ${{ matrix.platform }}" >> $GITHUB_STEP_SUMMARY
             echo "- 📅 **Build Date**: $(date)" >> $GITHUB_STEP_SUMMARY
             echo "- 🔢 **Build Number**: ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
@@ -210,15 +201,14 @@ jobs:
             echo "3. Report the issue if this persists" >> $GITHUB_STEP_SUMMARY
           else
             echo "## 🎉 ${{ matrix.platform }} Build Completed!" >> $GITHUB_STEP_SUMMARY
-            echo "- 📦 **Artifact**: ${{ matrix.artifact_name }}-build-${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
-            echo "- 🗜️ **Archive**: ${{ matrix.artifact_name }}-Archive-${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+            echo "- 📦 **Artifact**: ${{ matrix.artifact_name }}-${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
             echo "- 💻 **Platform**: ${{ matrix.platform }}" >> $GITHUB_STEP_SUMMARY
             echo "- 📅 **Build Date**: $(date)" >> $GITHUB_STEP_SUMMARY
             echo "- 🔢 **Build Number**: ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "### 📥 Cómo Descargar" >> $GITHUB_STEP_SUMMARY
             echo "1. Scroll hacia abajo hasta **Artifacts**" >> $GITHUB_STEP_SUMMARY
-            echo "2. Haz clic en **${{ matrix.artifact_name }}-build-${{ github.run_number }}**" >> $GITHUB_STEP_SUMMARY
+            echo "2. Haz clic en **${{ matrix.artifact_name }}-${{ github.run_number }}**" >> $GITHUB_STEP_SUMMARY
             echo "3. Descomprime y ejecuta" >> $GITHUB_STEP_SUMMARY
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -252,9 +242,9 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            artifacts/QA-Generator-Windows-Archive-*/QA-Generator-Windows-v1.0.0-build-*.zip
-            artifacts/QA-Generator-macOS-Archive-*/QA-Generator-macOS-v1.0.0-build-*.tar.gz
-            artifacts/QA-Generator-Linux-Archive-*/QA-Generator-Linux-v1.0.0-build-*.tar.gz
+            artifacts/QA-Generator-Windows-*/QA-Generator-Windows-v1.0.0-build-*.zip
+            artifacts/QA-Generator-macOS-*/QA-Generator-macOS-v1.0.0-build-*.tar.gz
+            artifacts/QA-Generator-Linux-*/QA-Generator-Linux-v1.0.0-build-*.tar.gz
           name: 🚀 QA Generator ${{ github.ref_name }}
           body: |
             ## 🚀 QA Generator ${{ github.ref_name }} - Multi-Platform Release
@@ -354,11 +344,11 @@ jobs:
           echo "- **Date**: $(date)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 🎯 Available Artifacts" >> $GITHUB_STEP_SUMMARY
-          echo "| Platform | Artifact Name | Archive |" >> $GITHUB_STEP_SUMMARY
-          echo "|----------|---------------|---------|" >> $GITHUB_STEP_SUMMARY
-          echo "| 🖥️ Windows | \`QA-Generator-Windows-build-${{ github.run_number }}\` | \`QA-Generator-Windows-Archive-${{ github.run_number }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| 🍎 macOS | \`QA-Generator-macOS-build-${{ github.run_number }}\` | \`QA-Generator-macOS-Archive-${{ github.run_number }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| 🐧 Linux | \`QA-Generator-Linux-build-${{ github.run_number }}\` | \`QA-Generator-Linux-Archive-${{ github.run_number }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Platform | Artifact Name |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|---------------|" >> $GITHUB_STEP_SUMMARY
+          echo "| 🖥️ Windows | \`QA-Generator-Windows-${{ github.run_number }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🍎 macOS | \`QA-Generator-macOS-${{ github.run_number }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🐧 Linux | \`QA-Generator-Linux-${{ github.run_number }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 📥 Instrucciones de Descarga" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY

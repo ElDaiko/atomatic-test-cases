@@ -5,11 +5,11 @@
   
   **Una aplicación de escritorio para generar casos de prueba automáticamente**
   
-  [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/tu-usuario/qa-generator/actions)
-  [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/tu-usuario/qa-generator/releases)
+  [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/ElDaiko/atomatic-test-cases/actions)
+  [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/ElDaiko/atomatic-test-cases/releases)
   [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-  [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/tu-usuario/qa-generator/releases)
-  [![Downloads](https://img.shields.io/badge/downloads-latest-blue.svg)](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml)
+  [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/ElDaiko/atomatic-test-cases/releases)
+  [![Downloads](https://img.shields.io/badge/downloads-latest-blue.svg)](https://github.com/ElDaiko/atomatic-test-cases/actions/workflows/build.yml)
 </div>
 
 ## 🎯 Descarga Rápida - Builds Automáticos
@@ -18,11 +18,11 @@
 
 ### 📦 Última Versión Disponible
 
-| Plataforma     | Descarga Directa                                                                                                        | Estado                                                                                                                             |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| 🖥️ **Windows** | [![Download Windows](https://img.shields.io/badge/Download-Windows-blue.svg?logo=windows)](#-acceso-inmediato-a-builds) | [![Windows Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/tu-usuario/qa-generator/actions) |
-| 🍎 **macOS**   | [![Download macOS](https://img.shields.io/badge/Download-macOS-black.svg?logo=apple)](#-acceso-inmediato-a-builds)      | [![macOS Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/tu-usuario/qa-generator/actions)   |
-| 🐧 **Linux**   | [![Download Linux](https://img.shields.io/badge/Download-Linux-orange.svg?logo=linux)](#-acceso-inmediato-a-builds)     | [![Linux Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/tu-usuario/qa-generator/actions)   |
+| Plataforma     | Descarga Directa                                                                                                                                                       | Estado                                                                                                                                 |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| 🖥️ **Windows** | [![Download Windows](https://img.shields.io/badge/Download-Windows-blue.svg?logo=windows)](https://github.com/ElDaiko/atomatic-test-cases/actions/workflows/build.yml) | [![Windows Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/ElDaiko/atomatic-test-cases/actions) |
+| 🍎 **macOS**   | [![Download macOS](https://img.shields.io/badge/Download-macOS-black.svg?logo=apple)](https://github.com/ElDaiko/atomatic-test-cases/actions/workflows/build.yml)      | [![macOS Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/ElDaiko/atomatic-test-cases/actions)   |
+| 🐧 **Linux**   | [![Download Linux](https://img.shields.io/badge/Download-Linux-orange.svg?logo=linux)](https://github.com/ElDaiko/atomatic-test-cases/actions/workflows/build.yml)     | [![Linux Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/ElDaiko/atomatic-test-cases/actions)   |
 
 ### 🚀 Acceso Inmediato a Builds
 
@@ -35,7 +35,7 @@
 3. Descarga el archivo correspondiente a tu sistema operativo
 4. ¡Listo! Ejecuta y usa la aplicación
 
-[🔗 **Ver todos los builds disponibles**](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml)
+[🔗 **Ver todos los builds disponibles**](https://github.com/ElDaiko/atomatic-test-cases/actions/workflows/build.yml)
 
 </div>
 
@@ -62,7 +62,7 @@
 
 ### 📥 Descarga Rápida (Recomendado)
 
-1. Ve a [Releases](https://github.com/tu-usuario/qa-generator/releases)
+1. Ve a [Releases](https://github.com/ElDaiko/atomatic-test-cases/releases)
 2. Descarga la última versión para tu sistema operativo
 3. Extrae el archivo ZIP
 4. Ejecuta `Iniciar_QA_Generator.bat` (Windows)
@@ -71,7 +71,7 @@
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/qa-generator.git
+git clone https://github.com/ElDaiko/atomatic-test-cases.git
 cd qa-generator
 
 # Instalar dependencias
@@ -196,7 +196,7 @@ Los **Artifacts** son los archivos ejecutables que se generan automáticamente c
 
 #### Método 1: Acceso Directo
 
-1. Ve a [GitHub Actions](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml)
+1. Ve a [GitHub Actions](https://github.com/ElDaiko/atomatic-test-cases/actions/workflows/build.yml)
 2. Haz clic en el **último workflow exitoso** (con ✅)
 3. Scroll hacia abajo hasta la sección **"Artifacts"**
 4. Descarga el archivo para tu plataforma:
@@ -206,9 +206,9 @@ Los **Artifacts** son los archivos ejecutables que se generan automáticamente c
 
 #### Método 2: Enlaces Directos
 
-- **Windows**: [🔗 Último build Windows](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml?query=branch%3Amain+is%3Asuccess)
-- **macOS**: [🔗 Último build macOS](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml?query=branch%3Amain+is%3Asuccess)
-- **Linux**: [🔗 Último build Linux](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml?query=branch%3Amain+is%3Asuccess)
+- **Windows**: [🔗 Último build Windows](https://github.com/ElDaiko/atomatic-test-cases/actions/workflows/build.yml)
+- **macOS**: [🔗 Último build macOS](https://github.com/ElDaiko/atomatic-test-cases/actions/workflows/build.yml)
+- **Linux**: [🔗 Último build Linux](https://github.com/ElDaiko/atomatic-test-cases/actions/workflows/build.yml)
 
 ### 🚀 Ventajas de los Artifacts
 
@@ -389,7 +389,7 @@ Este proyecto está bajo la licencia MIT. Ver [LICENSE](LICENSE) para más detal
   [� Contacto](mailto:miguel.roldan@pragma.com.co) · 
   [📖 Documentación](DOCUMENTACION_TECNICA.md) · 
   [🎯 Guía de Artifacts](ARTIFACTS_GUIA.md) ·
-  [📦 Descargar Latest](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml)
+  [📦 Descargar Latest](https://github.com/ElDaiko/atomatic-test-cases/actions/workflows/build.yml)
   
 </div>
 
