@@ -45,6 +45,7 @@
     "appId": "com.qa-aut.test-generator",
     "productName": "Generador de Casos de Prueba QA",
     "forceCodeSigning": false,
+    "publish": null,
     "directories": {
       "output": "dist-electron"
     },
