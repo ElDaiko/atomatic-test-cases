@@ -169,17 +169,20 @@ jobs:
       - name: 🗜️ Create Compressed Archive
         shell: bash
         run: |
+          # Create archive with simplified naming and no nested folders
           if [ "${{ matrix.platform }}" = "Windows" ]; then
-            powershell Compress-Archive -Path "QA_Generator_${{ matrix.platform }}/*" -DestinationPath "QA-Generator-${{ matrix.platform }}-v1.0.0-build-${{ github.run_number }}.zip"
+            powershell Compress-Archive -Path "QA_Generator_${{ matrix.platform }}/*" -DestinationPath "Windows-qa-automatization.zip"
+          elif [ "${{ matrix.platform }}" = "macOS" ]; then
+            tar -czf "macOS-qa-automatization.tar.gz" -C "QA_Generator_${{ matrix.platform }}" .
           else
-            tar -czf "QA-Generator-${{ matrix.platform }}-v1.0.0-build-${{ github.run_number }}.tar.gz" -C "QA_Generator_${{ matrix.platform }}" .
+            tar -czf "Linux-qa-automatization.tar.gz" -C "QA_Generator_${{ matrix.platform }}" .
           fi
 
       - name: 📤 Upload Platform Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact_name }}-${{ github.run_number }}
-          path: QA-Generator-${{ matrix.platform }}-v1.0.0-build-${{ github.run_number }}.*
+          path: ${{ matrix.platform }}-qa-automatization.*
           retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
           if-no-files-found: warn
 
@@ -242,9 +245,9 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            artifacts/QA-Generator-Windows-*/QA-Generator-Windows-v1.0.0-build-*.zip
-            artifacts/QA-Generator-macOS-*/QA-Generator-macOS-v1.0.0-build-*.tar.gz
-            artifacts/QA-Generator-Linux-*/QA-Generator-Linux-v1.0.0-build-*.tar.gz
+            artifacts/QA-Generator-Windows-*/Windows-qa-automatization.zip
+            artifacts/QA-Generator-macOS-*/macOS-qa-automatization.tar.gz
+            artifacts/QA-Generator-Linux-*/Linux-qa-automatization.tar.gz
           name: 🚀 QA Generator ${{ github.ref_name }}
           body: |
             ## 🚀 QA Generator ${{ github.ref_name }} - Multi-Platform Release
@@ -252,21 +255,21 @@ jobs:
             ### 📦 Descargas Disponibles
 
             #### 🖥️ Windows
-            - **Archivo**: `QA-Generator-Windows-v1.0.0-build-*.zip`
+            - **Archivo**: `Windows-qa-automatization.zip`
             - **Instalación**: 
               1. Descomprime el ZIP
               2. Ejecuta `Iniciar_QA_Generator.bat`
               3. ¡Listo!
 
             #### 🍎 macOS
-            - **Archivo**: `QA-Generator-macOS-v1.0.0-build-*.tar.gz`
+            - **Archivo**: `macOS-qa-automatization.tar.gz`
             - **Instalación**:
               1. Descomprime el archivo
               2. Ejecuta el archivo .dmg
               3. Arrastra a Applications
 
             #### 🐧 Linux
-            - **Archivo**: `QA-Generator-Linux-v1.0.0-build-*.tar.gz`
+            - **Archivo**: `Linux-qa-automatization.tar.gz`
             - **Instalación**:
               1. Descomprime el archivo
               2. Ejecuta el .AppImage

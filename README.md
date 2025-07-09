@@ -200,9 +200,9 @@ Los **Artifacts** son los archivos ejecutables que se generan automáticamente c
 2. Haz clic en el **último workflow exitoso** (con ✅)
 3. Scroll hacia abajo hasta la sección **"Artifacts"**
 4. Descarga el archivo para tu plataforma:
-   - `QA-Generator-Windows-build-XXX`
-   - `QA-Generator-macOS-build-XXX`
-   - `QA-Generator-Linux-build-XXX`
+   - `Windows-qa-automatization.zip`
+   - `macOS-qa-automatization.tar.gz`
+   - `Linux-qa-automatization.tar.gz`
 
 #### Método 2: Enlaces Directos
 
