@@ -19,7 +19,8 @@
     "dist-win": "npm run build && electron-builder --win",
     "dist-mac": "npm run build && electron-builder --mac",
     "dist-linux": "npm run build && electron-builder --linux",
-    "clean": "rimraf dist dist-electron electron-cache node_modules/.cache"
+    "clean": "rimraf dist dist-electron electron-cache node_modules/.cache",
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
     "react": "^19.1.0",

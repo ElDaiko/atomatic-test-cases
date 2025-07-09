@@ -5,11 +5,11 @@
   
   **Una aplicación de escritorio para generar casos de prueba automáticamente**
   
-  [![Build Status](https://github.com/tu-usuario/qa-generator/workflows/🚀%20Build%20QA%20Generator%20-%20Multi-Platform/badge.svg)](https://github.com/tu-usuario/qa-generator/actions)
+  [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/tu-usuario/qa-generator/actions)
   [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/tu-usuario/qa-generator/releases)
   [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
   [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/tu-usuario/qa-generator/releases)
-  [![Downloads](https://img.shields.io/github/downloads/tu-usuario/qa-generator/total.svg)](https://github.com/tu-usuario/qa-generator/releases)
+  [![Downloads](https://img.shields.io/badge/downloads-latest-blue.svg)](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml)
 </div>
 
 ## 🎯 Descarga Rápida - Builds Automáticos
@@ -18,11 +18,11 @@
 
 ### 📦 Última Versión Disponible
 
-| Plataforma     | Descarga Directa                                                                                                                                                   | Estado                                                                                                                                                                                              |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🖥️ **Windows** | [![Download Windows](https://img.shields.io/badge/Download-Windows-blue.svg?logo=windows)](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml) | [![Windows Build](https://github.com/tu-usuario/qa-generator/workflows/🚀%20Build%20QA%20Generator%20-%20Multi-Platform/badge.svg?branch=main)](https://github.com/tu-usuario/qa-generator/actions) |
-| 🍎 **macOS**   | [![Download macOS](https://img.shields.io/badge/Download-macOS-black.svg?logo=apple)](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml)      | [![macOS Build](https://github.com/tu-usuario/qa-generator/workflows/🚀%20Build%20QA%20Generator%20-%20Multi-Platform/badge.svg?branch=main)](https://github.com/tu-usuario/qa-generator/actions)   |
-| 🐧 **Linux**   | [![Download Linux](https://img.shields.io/badge/Download-Linux-orange.svg?logo=linux)](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml)     | [![Linux Build](https://github.com/tu-usuario/qa-generator/workflows/🚀%20Build%20QA%20Generator%20-%20Multi-Platform/badge.svg?branch=main)](https://github.com/tu-usuario/qa-generator/actions)   |
+| Plataforma     | Descarga Directa                                                                                                        | Estado                                                                                                                             |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| 🖥️ **Windows** | [![Download Windows](https://img.shields.io/badge/Download-Windows-blue.svg?logo=windows)](#-acceso-inmediato-a-builds) | [![Windows Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/tu-usuario/qa-generator/actions) |
+| 🍎 **macOS**   | [![Download macOS](https://img.shields.io/badge/Download-macOS-black.svg?logo=apple)](#-acceso-inmediato-a-builds)      | [![macOS Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/tu-usuario/qa-generator/actions)   |
+| 🐧 **Linux**   | [![Download Linux](https://img.shields.io/badge/Download-Linux-orange.svg?logo=linux)](#-acceso-inmediato-a-builds)     | [![Linux Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/tu-usuario/qa-generator/actions)   |
 
 ### 🚀 Acceso Inmediato a Builds
 
@@ -286,14 +286,82 @@ git push origin main
 
 ## 🐛 Reportar Problemas
 
-Si encuentras algún problema:
+### 📋 Antes de Reportar
 
-1. Verifica que no esté ya reportado en [Issues](https://github.com/tu-usuario/qa-generator/issues)
-2. Crea un nuevo issue con:
-   - Descripción clara del problema
-   - Pasos para reproducir
-   - Capturas de pantalla si es necesario
-   - Información del sistema (OS, versión, etc.)
+1. **Verifica la documentación**: Consulta [GUIA_USUARIO.md](GUIA_USUARIO.md) y [DOCUMENTACION_TECNICA.md](DOCUMENTACION_TECNICA.md)
+2. **Prueba la última versión**: Descarga el artifact más reciente
+3. **Revisa problemas conocidos**: Consulta la sección de troubleshooting
+
+### 🚀 Tipos de Issues
+
+#### 🐛 Bug Report
+
+**Plantilla para reportar bugs:**
+
+```
+## 🐛 Descripción del Bug
+[Descripción clara y concisa del problema]
+
+## 🔄 Pasos para Reproducir
+1. Ir a...
+2. Hacer clic en...
+3. Observar error...
+
+## 📋 Comportamiento Esperado
+[Qué debería pasar]
+
+## 📋 Comportamiento Actual
+[Qué está pasando]
+
+## 🖥️ Información del Sistema
+- OS: [Windows 10/11, macOS, Linux]
+- Versión de QA Generator: [1.0.0]
+- Build Number: [del archivo VERSION.txt]
+
+## 📎 Capturas de Pantalla
+[Si aplica, adjunta capturas]
+```
+
+#### ✨ Feature Request
+
+**Plantilla para solicitar features:**
+
+```
+## ✨ Descripción del Feature
+[Descripción clara de la funcionalidad deseada]
+
+## 🎯 Problema que Resuelve
+[Qué problema específico resuelve]
+
+## 💡 Propuesta de Solución
+[Cómo crees que debería implementarse]
+
+## 📋 Casos de Uso
+[Ejemplos de cómo se usaría]
+```
+
+#### 🔧 Soporte Técnico
+
+**Para problemas de instalación o configuración:**
+
+```
+## 🔧 Problema de Soporte
+[Describe el problema técnico]
+
+## 🖥️ Configuración
+- Sistema Operativo:
+- Versión de Node.js:
+- Método de instalación: [Artifact/Build local]
+
+## 📋 Logs/Errores
+[Copia cualquier mensaje de error]
+```
+
+### 📞 Contacto de Soporte
+
+- **Email**: miguel.roldan@pragma.com.co
+- **Equipo**: Pragma - Área de QA
+- **Respuesta**: 24-48 horas hábiles
 
 ## 📚 Documentación
 
@@ -318,10 +386,10 @@ Este proyecto está bajo la licencia MIT. Ver [LICENSE](LICENSE) para más detal
   
   **¿Te gusta el proyecto? ¡Dale una ⭐!**
   
-  [🐛 Reportar Bug](https://github.com/tu-usuario/qa-generator/issues) · 
-  [✨ Solicitar Feature](https://github.com/tu-usuario/qa-generator/issues) · 
-  [📖 Documentación](https://github.com/tu-usuario/qa-generator/wiki) ·
-  [📦 Descargar Artifacts](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml)
+  [� Contacto](mailto:miguel.roldan@pragma.com.co) · 
+  [📖 Documentación](DOCUMENTACION_TECNICA.md) · 
+  [🎯 Guía de Artifacts](ARTIFACTS_GUIA.md) ·
+  [📦 Descargar Latest](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml)
   
 </div>
 
