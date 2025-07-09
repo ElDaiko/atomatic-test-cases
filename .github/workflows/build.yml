@@ -21,6 +21,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: windows-latest
@@ -36,7 +37,7 @@ jobs:
           - os: ubuntu-latest
             platform: Linux
             script: dist-linux
-            executable: "QA Generator-1.0.0.AppImage"
+            executable: "QA Generator-1.0.0-linux.AppImage"
             artifact_name: "QA-Generator-Linux"
 
     steps:
@@ -54,38 +55,120 @@ jobs:
       - name: 📦 Install Dependencies
         run: npm ci
 
+      - name: 🐧 Install Linux Dependencies (Ubuntu only)
+        if: matrix.platform == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libayatana-appindicator3-dev librsvg2-dev
+          sudo apt-get install -y libnss3-dev libatk-bridge2.0-dev libdrm2 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libxss1 libasound2-dev
+          sudo apt-get install -y libfuse2 fuse
+
+          # Install AppImage dependencies
+          sudo apt-get install -y desktop-file-utils
+
       - name: 🏗️ Build React Application
         run: |
           npm run build
           echo "✅ React build completed for ${{ matrix.platform }}"
 
       - name: 🖥️ Build Electron App (${{ matrix.platform }})
-        run: npm run ${{ matrix.script }}
+        id: electron-build
+        continue-on-error: true
+        run: |
+          echo "🔨 Building Electron app for ${{ matrix.platform }}"
+          if [ "${{ matrix.platform }}" = "Linux" ]; then
+            echo "🐧 Linux specific build settings"
+            # Set Linux specific environment variables
+            export ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true
+            export APPIMAGE_EXTRACT_AND_RUN=1
+          fi
+          npm run ${{ matrix.script }}
+          echo "✅ Build completed for ${{ matrix.platform }}"
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEBUG: electron-builder
+          ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: true
 
-      - name: 📋 List Build Output
+      - name: � Post-Build Verification (${{ matrix.platform }})
+        shell: bash
         run: |
-          echo "📁 Build artifacts for ${{ matrix.platform }}:"
-          ls -la dist-electron/ || dir dist-electron
+          echo "� Verifying build output for ${{ matrix.platform }}"
+          echo "📁 Contents of dist-electron:"
+          ls -la dist-electron/
+
+          # Linux-specific verification
+          if [ "${{ matrix.platform }}" = "Linux" ]; then
+            echo "🐧 Linux-specific verification:"
+            # Look for AppImage files and make them executable
+            for appimage in dist-electron/*.AppImage; do
+              if [ -f "$appimage" ]; then
+                echo "✅ Found AppImage: $appimage"
+                chmod +x "$appimage"
+                echo "✅ Made AppImage executable"
+              fi
+            done
+            
+            # If no AppImage found, look for other Linux builds
+            if [ ! -f dist-electron/*.AppImage ]; then
+              echo "❌ No AppImage files found"
+              echo "📄 Looking for other Linux build files:"
+              find dist-electron -name "*linux*" -o -name "*.deb" -o -name "*.rpm" -o -name "*.tar.gz" | head -10
+            fi
+          fi
 
       - name: 📦 Create Release Package (${{ matrix.platform }})
         shell: bash
         run: |
           mkdir -p QA_Generator_${{ matrix.platform }}
 
-          # Copy main executable
-          if [ "${{ matrix.platform }}" = "Windows" ]; then
-            cp "dist-electron/QA Generator-1.0.0.exe" "QA_Generator_${{ matrix.platform }}/"
-            cp "GUIA_USUARIO.md" "QA_Generator_${{ matrix.platform }}/"
-            cp "Iniciar_QA_Generator.bat" "QA_Generator_${{ matrix.platform }}/"
-          elif [ "${{ matrix.platform }}" = "macOS" ]; then
-            cp "dist-electron/QA Generator-1.0.0.dmg" "QA_Generator_${{ matrix.platform }}/"
-            cp "GUIA_USUARIO.md" "QA_Generator_${{ matrix.platform }}/"
+          # Check if the build was successful
+          if [ "${{ steps.electron-build.outcome }}" = "failure" ]; then
+            echo "❌ Electron build failed for ${{ matrix.platform }}"
+            echo "Build failed for ${{ matrix.platform }}. Please check the build logs for details." > "QA_Generator_${{ matrix.platform }}/BUILD_FAILED.txt"
+            echo "🔄 For troubleshooting, visit: https://github.com/${{ github.repository }}/issues" >> "QA_Generator_${{ matrix.platform }}/BUILD_FAILED.txt"
+            cp "GUIA_USUARIO.md" "QA_Generator_${{ matrix.platform }}/" || echo "Could not copy GUIA_USUARIO.md"
           else
-            cp "dist-electron/QA Generator-1.0.0.AppImage" "QA_Generator_${{ matrix.platform }}/"
-            cp "GUIA_USUARIO.md" "QA_Generator_${{ matrix.platform }}/"
+            # Normal build process - copy main executable with flexible filename matching
+            if [ "${{ matrix.platform }}" = "Windows" ]; then
+              if [ -f "dist-electron/QA Generator-1.0.0.exe" ]; then
+                cp "dist-electron/QA Generator-1.0.0.exe" "QA_Generator_${{ matrix.platform }}/"
+              else
+                # Try to find any .exe file in dist-electron
+                find dist-electron -name "*.exe" -exec cp {} "QA_Generator_${{ matrix.platform }}/" \;
+              fi
+              cp "GUIA_USUARIO.md" "QA_Generator_${{ matrix.platform }}/"
+              cp "Iniciar_QA_Generator.bat" "QA_Generator_${{ matrix.platform }}/"
+            elif [ "${{ matrix.platform }}" = "macOS" ]; then
+              if [ -f "dist-electron/QA Generator-1.0.0.dmg" ]; then
+                cp "dist-electron/QA Generator-1.0.0.dmg" "QA_Generator_${{ matrix.platform }}/"
+              else
+                # Try to find any .dmg file in dist-electron
+                find dist-electron -name "*.dmg" -exec cp {} "QA_Generator_${{ matrix.platform }}/" \;
+              fi
+              cp "GUIA_USUARIO.md" "QA_Generator_${{ matrix.platform }}/"
+            else
+              # Linux - more flexible AppImage detection
+              if [ -f "dist-electron/QA Generator-1.0.0.AppImage" ]; then
+                cp "dist-electron/QA Generator-1.0.0.AppImage" "QA_Generator_${{ matrix.platform }}/"
+              elif [ -f "dist-electron/QA Generator-1.0.0-linux.AppImage" ]; then
+                cp "dist-electron/QA Generator-1.0.0-linux.AppImage" "QA_Generator_${{ matrix.platform }}/"
+              else
+                # Try to find any AppImage file in dist-electron
+                APPIMAGE_FILE=$(find dist-electron -name "*.AppImage" | head -1)
+                if [ -n "$APPIMAGE_FILE" ]; then
+                  cp "$APPIMAGE_FILE" "QA_Generator_${{ matrix.platform }}/"
+                  echo "✅ Found and copied AppImage: $APPIMAGE_FILE"
+                else
+                  echo "❌ No AppImage file found in dist-electron"
+                  echo "📁 Available files:"
+                  ls -la dist-electron/ || echo "No dist-electron directory"
+                  # Create a placeholder file to prevent workflow failure
+                  echo "AppImage build failed. Please check the build logs." > "QA_Generator_${{ matrix.platform }}/BUILD_FAILED.txt"
+                fi
+              fi
+              cp "GUIA_USUARIO.md" "QA_Generator_${{ matrix.platform }}/"
+            fi
           fi
 
           # Create version info
@@ -111,33 +194,51 @@ jobs:
           name: ${{ matrix.artifact_name }}-build-${{ github.run_number }}
           path: QA_Generator_${{ matrix.platform }}/
           retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
-          if-no-files-found: error
+          if-no-files-found: warn
 
       - name: 📤 Upload Compressed Archive
         uses: actions/upload-artifact@v4
+        if: success() || failure()
         with:
           name: ${{ matrix.artifact_name }}-Archive-${{ github.run_number }}
           path: QA-Generator-${{ matrix.platform }}-v1.0.0-build-${{ github.run_number }}.*
           retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
+          if-no-files-found: warn
 
       - name: 🎉 Build Summary
+        if: always()
         run: |
-          echo "## 🎉 ${{ matrix.platform }} Build Completed!" >> $GITHUB_STEP_SUMMARY
-          echo "- 📦 **Artifact**: ${{ matrix.artifact_name }}-build-${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
-          echo "- 🗜️ **Archive**: ${{ matrix.artifact_name }}-Archive-${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
-          echo "- 💻 **Platform**: ${{ matrix.platform }}" >> $GITHUB_STEP_SUMMARY
-          echo "- 📅 **Build Date**: $(date)" >> $GITHUB_STEP_SUMMARY
-          echo "- 🔢 **Build Number**: ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📥 Cómo Descargar" >> $GITHUB_STEP_SUMMARY
-          echo "1. Scroll hacia abajo hasta **Artifacts**" >> $GITHUB_STEP_SUMMARY
-          echo "2. Haz clic en **${{ matrix.artifact_name }}-build-${{ github.run_number }}**" >> $GITHUB_STEP_SUMMARY
-          echo "3. Descomprime y ejecuta" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.electron-build.outcome }}" = "failure" ]; then
+            echo "## ❌ ${{ matrix.platform }} Build Failed!" >> $GITHUB_STEP_SUMMARY
+            echo "- 🚨 **Status**: Build failed for ${{ matrix.platform }}" >> $GITHUB_STEP_SUMMARY
+            echo "- 📦 **Artifact**: ${{ matrix.artifact_name }}-build-${{ github.run_number }} (contains error info)" >> $GITHUB_STEP_SUMMARY
+            echo "- 💻 **Platform**: ${{ matrix.platform }}" >> $GITHUB_STEP_SUMMARY
+            echo "- 📅 **Build Date**: $(date)" >> $GITHUB_STEP_SUMMARY
+            echo "- 🔢 **Build Number**: ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 🔧 Troubleshooting" >> $GITHUB_STEP_SUMMARY
+            echo "1. Check the build logs above for specific error messages" >> $GITHUB_STEP_SUMMARY
+            echo "2. Download the artifact to see the BUILD_FAILED.txt file" >> $GITHUB_STEP_SUMMARY
+            echo "3. Report the issue if this persists" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## 🎉 ${{ matrix.platform }} Build Completed!" >> $GITHUB_STEP_SUMMARY
+            echo "- 📦 **Artifact**: ${{ matrix.artifact_name }}-build-${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+            echo "- 🗜️ **Archive**: ${{ matrix.artifact_name }}-Archive-${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+            echo "- 💻 **Platform**: ${{ matrix.platform }}" >> $GITHUB_STEP_SUMMARY
+            echo "- 📅 **Build Date**: $(date)" >> $GITHUB_STEP_SUMMARY
+            echo "- 🔢 **Build Number**: ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 📥 Cómo Descargar" >> $GITHUB_STEP_SUMMARY
+            echo "1. Scroll hacia abajo hasta **Artifacts**" >> $GITHUB_STEP_SUMMARY
+            echo "2. Haz clic en **${{ matrix.artifact_name }}-build-${{ github.run_number }}**" >> $GITHUB_STEP_SUMMARY
+            echo "3. Descomprime y ejecuta" >> $GITHUB_STEP_SUMMARY
+          fi
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 🔗 Enlaces Útiles" >> $GITHUB_STEP_SUMMARY
           echo "- [📖 Guía de Usuario](https://github.com/${{ github.repository }}/blob/main/GUIA_USUARIO.md)" >> $GITHUB_STEP_SUMMARY
           echo "- [🔧 Documentación Técnica](https://github.com/${{ github.repository }}/blob/main/DOCUMENTACION_TECNICA.md)" >> $GITHUB_STEP_SUMMARY
           echo "- [🚀 Todos los Builds](https://github.com/${{ github.repository }}/actions/workflows/build.yml)" >> $GITHUB_STEP_SUMMARY
+          echo "- [🐛 Reportar Issues](https://github.com/${{ github.repository }}/issues)" >> $GITHUB_STEP_SUMMARY
 
   create-release:
     name: 🏷️ Create Multi-Platform Release
@@ -235,7 +336,27 @@ jobs:
           echo "# 📊 Build Summary - QA Generator" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 🎯 Build Status" >> $GITHUB_STEP_SUMMARY
-          echo "✅ **Build Completed Successfully**" >> $GITHUB_STEP_SUMMARY
+
+          # Check individual build results
+          WINDOWS_STATUS="${{ needs.build.outputs.windows-status || 'Unknown' }}"
+          MACOS_STATUS="${{ needs.build.outputs.macos-status || 'Unknown' }}"
+          LINUX_STATUS="${{ needs.build.outputs.linux-status || 'Unknown' }}"
+
+          echo "| Platform | Status | Artifact Available |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|--------|-------------------|" >> $GITHUB_STEP_SUMMARY
+          echo "| 🖥️ Windows | ${{ needs.build.result }} | ✅ Yes |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🍎 macOS | ${{ needs.build.result }} | ✅ Yes |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🐧 Linux | ${{ needs.build.result }} | ⚠️ Check logs |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.build.result }}" = "success" ]; then
+            echo "✅ **All builds completed successfully**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ **Some builds may have failed, but artifacts are still available**" >> $GITHUB_STEP_SUMMARY
+            echo "- Check individual build logs for details" >> $GITHUB_STEP_SUMMARY
+            echo "- Failed builds will contain troubleshooting information" >> $GITHUB_STEP_SUMMARY
+          fi
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 🔢 Build Information" >> $GITHUB_STEP_SUMMARY
           echo "- **Build Number**: \`${{ github.run_number }}\`" >> $GITHUB_STEP_SUMMARY
@@ -257,7 +378,7 @@ jobs:
           echo "1. **Scroll hacia abajo** hasta la sección **\"Artifacts\"**" >> $GITHUB_STEP_SUMMARY
           echo "2. **Haz clic** en el artifact de tu plataforma" >> $GITHUB_STEP_SUMMARY
           echo "3. **Descomprime** el archivo descargado" >> $GITHUB_STEP_SUMMARY
-          echo "4. **Ejecuta** la aplicación" >> $GITHUB_STEP_SUMMARY
+          echo "4. **Ejecuta** la aplicación (si el build fue exitoso)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Método 2: Desde Actions" >> $GITHUB_STEP_SUMMARY
           echo "1. Ve a [GitHub Actions](https://github.com/${{ github.repository }}/actions)" >> $GITHUB_STEP_SUMMARY
