@@ -1,70 +1,281 @@
-name: Build Electron App
+name: 🚀 Build QA Generator - Multi-Platform
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
+    paths-ignore:
+      - "**.md"
+      - ".gitignore"
+      - "docs/**"
   pull_request:
     branches: [main]
   workflow_dispatch:
 
+env:
+  NODE_VERSION: "20"
+  ARTIFACT_RETENTION_DAYS: 30
+
 jobs:
   build:
+    name: 🔨 Build ${{ matrix.platform }}
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: windows-latest
+            platform: Windows
+            script: dist-win
+            executable: "QA Generator-1.0.0.exe"
+            artifact_name: "QA-Generator-Windows"
+          - os: macos-latest
+            platform: macOS
+            script: dist-mac
+            executable: "QA Generator-1.0.0.dmg"
+            artifact_name: "QA-Generator-macOS"
+          - os: ubuntu-latest
+            platform: Linux
+            script: dist-linux
+            executable: "QA Generator-1.0.0.AppImage"
+            artifact_name: "QA-Generator-Linux"
 
     steps:
-      - uses: actions/checkout@v4
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Setup Node.js
+      - name: 🔧 Setup Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
-      - name: Install dependencies
-        run: npm ci
+      - name: 📦 Install Dependencies
+        run: |
+          npm ci
+          npm run postinstall || echo "No postinstall script"
 
-      - name: Build application
-        run: npm run build
+      - name: 🏗️ Build React Application
+        run: |
+          npm run build
+          echo "✅ React build completed for ${{ matrix.platform }}"
 
-      - name: Build Electron app (Windows)
-        if: matrix.os == 'windows-latest'
-        run: npm run dist-win
+      - name: 🖥️ Build Electron App (${{ matrix.platform }})
+        run: npm run ${{ matrix.script }}
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Electron app (macOS)
-        if: matrix.os == 'macos-latest'
-        run: npm run dist-mac
+      - name: 📋 List Build Output
+        run: |
+          echo "📁 Build artifacts for ${{ matrix.platform }}:"
+          ls -la dist-electron/ || dir dist-electron
+
+      - name: 📦 Create Release Package (${{ matrix.platform }})
+        shell: bash
+        run: |
+          mkdir -p QA_Generator_${{ matrix.platform }}
+
+          # Copy main executable
+          if [ "${{ matrix.platform }}" = "Windows" ]; then
+            cp "dist-electron/QA Generator-1.0.0.exe" "QA_Generator_${{ matrix.platform }}/"
+            cp "GUIA_USUARIO.md" "QA_Generator_${{ matrix.platform }}/"
+            cp "Iniciar_QA_Generator.bat" "QA_Generator_${{ matrix.platform }}/"
+          elif [ "${{ matrix.platform }}" = "macOS" ]; then
+            cp "dist-electron/QA Generator-1.0.0.dmg" "QA_Generator_${{ matrix.platform }}/"
+            cp "GUIA_USUARIO.md" "QA_Generator_${{ matrix.platform }}/"
+          else
+            cp "dist-electron/QA Generator-1.0.0.AppImage" "QA_Generator_${{ matrix.platform }}/"
+            cp "GUIA_USUARIO.md" "QA_Generator_${{ matrix.platform }}/"
+          fi
+
+          # Create version info
+          echo "🚀 QA Generator v1.0.0 - ${{ matrix.platform }}" > "QA_Generator_${{ matrix.platform }}/VERSION.txt"
+          echo "📅 Build Date: $(date)" >> "QA_Generator_${{ matrix.platform }}/VERSION.txt"
+          echo "📝 Commit: ${{ github.sha }}" >> "QA_Generator_${{ matrix.platform }}/VERSION.txt"
+          echo "🌿 Branch: ${{ github.ref_name }}" >> "QA_Generator_${{ matrix.platform }}/VERSION.txt"
+          echo "🔢 Build Number: ${{ github.run_number }}" >> "QA_Generator_${{ matrix.platform }}/VERSION.txt"
+          echo "💻 Platform: ${{ matrix.platform }}" >> "QA_Generator_${{ matrix.platform }}/VERSION.txt"
+
+      - name: 🗜️ Create Compressed Archive
+        shell: bash
+        run: |
+          if [ "${{ matrix.platform }}" = "Windows" ]; then
+            powershell Compress-Archive -Path "QA_Generator_${{ matrix.platform }}/*" -DestinationPath "QA-Generator-${{ matrix.platform }}-v1.0.0-build-${{ github.run_number }}.zip"
+          else
+            tar -czf "QA-Generator-${{ matrix.platform }}-v1.0.0-build-${{ github.run_number }}.tar.gz" -C "QA_Generator_${{ matrix.platform }}" .
+          fi
+
+      - name: 📤 Upload Platform Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}-build-${{ github.run_number }}
+          path: QA_Generator_${{ matrix.platform }}/
+          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
+          if-no-files-found: error
+
+      - name: 📤 Upload Compressed Archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}-Archive-${{ github.run_number }}
+          path: QA-Generator-${{ matrix.platform }}-v1.0.0-build-${{ github.run_number }}.*
+          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
+
+      - name: 🎉 Build Summary
+        run: |
+          echo "## 🎉 ${{ matrix.platform }} Build Completed!" >> $GITHUB_STEP_SUMMARY
+          echo "- 📦 **Artifact**: ${{ matrix.artifact_name }}-build-${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🗜️ **Archive**: ${{ matrix.artifact_name }}-Archive-${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 💻 **Platform**: ${{ matrix.platform }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 📅 **Build Date**: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔢 **Build Number**: ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📥 Cómo Descargar" >> $GITHUB_STEP_SUMMARY
+          echo "1. Scroll hacia abajo hasta **Artifacts**" >> $GITHUB_STEP_SUMMARY
+          echo "2. Haz clic en **${{ matrix.artifact_name }}-build-${{ github.run_number }}**" >> $GITHUB_STEP_SUMMARY
+          echo "3. Descomprime y ejecuta" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔗 Enlaces Útiles" >> $GITHUB_STEP_SUMMARY
+          echo "- [📖 Guía de Usuario](https://github.com/${{ github.repository }}/blob/main/GUIA_USUARIO.md)" >> $GITHUB_STEP_SUMMARY
+          echo "- [🔧 Documentación Técnica](https://github.com/${{ github.repository }}/blob/main/DOCUMENTACION_TECNICA.md)" >> $GITHUB_STEP_SUMMARY
+          echo "- [🚀 Todos los Builds](https://github.com/${{ github.repository }}/actions/workflows/build.yml)" >> $GITHUB_STEP_SUMMARY
+
+  create-release:
+    name: 🏷️ Create Multi-Platform Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📥 Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+
+      - name: 📋 List Downloaded Artifacts
+        run: |
+          echo "📁 Downloaded artifacts:"
+          find artifacts/ -name "*.zip" -o -name "*.tar.gz" -o -name "*.dmg" -o -name "*.exe" -o -name "*.AppImage"
+
+      - name: 🏷️ Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            artifacts/QA-Generator-Windows-Archive-*/QA-Generator-Windows-v1.0.0-build-*.zip
+            artifacts/QA-Generator-macOS-Archive-*/QA-Generator-macOS-v1.0.0-build-*.tar.gz
+            artifacts/QA-Generator-Linux-Archive-*/QA-Generator-Linux-v1.0.0-build-*.tar.gz
+          name: 🚀 QA Generator ${{ github.ref_name }}
+          body: |
+            ## 🚀 QA Generator ${{ github.ref_name }} - Multi-Platform Release
+
+            ### 📦 Descargas Disponibles
+
+            #### 🖥️ Windows
+            - **Archivo**: `QA-Generator-Windows-v1.0.0-build-*.zip`
+            - **Instalación**: 
+              1. Descomprime el ZIP
+              2. Ejecuta `Iniciar_QA_Generator.bat`
+              3. ¡Listo!
+
+            #### 🍎 macOS
+            - **Archivo**: `QA-Generator-macOS-v1.0.0-build-*.tar.gz`
+            - **Instalación**:
+              1. Descomprime el archivo
+              2. Ejecuta el archivo .dmg
+              3. Arrastra a Applications
+
+            #### 🐧 Linux
+            - **Archivo**: `QA-Generator-Linux-v1.0.0-build-*.tar.gz`
+            - **Instalación**:
+              1. Descomprime el archivo
+              2. Ejecuta el .AppImage
+              3. O instala según tu distribución
+
+            ### ✨ Características
+            - ✅ Generación automática de casos de prueba
+            - ✅ Múltiples formatos de exportación
+            - ✅ Integración con Azure DevOps
+            - ✅ Interfaz moderna y responsive
+            - ✅ Multiplataforma
+
+            ### 🔧 Requisitos
+            - **Windows**: Windows 10/11 (64-bit)
+            - **macOS**: macOS 10.14 o superior
+            - **Linux**: Ubuntu 18.04+ o distribuciones equivalentes
+
+            ### 📝 Notas de la Versión
+            - Build Number: ${{ github.run_number }}
+            - Commit: ${{ github.sha }}
+            - Fecha: $(date)
+
+            ### 🆘 Soporte
+            - [🐛 Reportar Bug](https://github.com/${{ github.repository }}/issues)
+            - [📖 Documentación](https://github.com/${{ github.repository }}/blob/main/DOCUMENTACION_TECNICA.md)
+            - [💡 Solicitar Feature](https://github.com/${{ github.repository }}/issues)
+
+            ---
+            **¿Te gusta QA Generator? ¡Dale una ⭐ al repositorio!**
+          draft: false
+          prerelease: false
+          generate_release_notes: true
         env:
-          CSC_IDENTITY_AUTO_DISCOVERY: false
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Electron app (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        run: npm run dist-linux
-        env:
-          CSC_IDENTITY_AUTO_DISCOVERY: false
+  summary:
+    name: 📊 Build Summary
+    if: always()
+    needs: build
+    runs-on: ubuntu-latest
 
-      - name: Upload Windows artifacts
-        if: matrix.os == 'windows-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-executable
-          path: dist-electron/
-
-      - name: Upload macOS artifacts
-        if: matrix.os == 'macos-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: macos-executable
-          path: dist-electron/
-
-      - name: Upload Linux artifacts
-        if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux-executable
-          path: dist-electron/
+    steps:
+      - name: 📊 Generate Summary
+        run: |
+          echo "# 📊 Build Summary - QA Generator" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🎯 Build Status" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Build Completed Successfully**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔢 Build Information" >> $GITHUB_STEP_SUMMARY
+          echo "- **Build Number**: \`${{ github.run_number }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Triggered by**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Date**: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🎯 Available Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "| Platform | Artifact Name | Archive |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|---------------|---------|" >> $GITHUB_STEP_SUMMARY
+          echo "| 🖥️ Windows | \`QA-Generator-Windows-build-${{ github.run_number }}\` | \`QA-Generator-Windows-Archive-${{ github.run_number }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🍎 macOS | \`QA-Generator-macOS-build-${{ github.run_number }}\` | \`QA-Generator-macOS-Archive-${{ github.run_number }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🐧 Linux | \`QA-Generator-Linux-build-${{ github.run_number }}\` | \`QA-Generator-Linux-Archive-${{ github.run_number }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📥 Instrucciones de Descarga" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Método 1: Desde esta página" >> $GITHUB_STEP_SUMMARY
+          echo "1. **Scroll hacia abajo** hasta la sección **\"Artifacts\"**" >> $GITHUB_STEP_SUMMARY
+          echo "2. **Haz clic** en el artifact de tu plataforma" >> $GITHUB_STEP_SUMMARY
+          echo "3. **Descomprime** el archivo descargado" >> $GITHUB_STEP_SUMMARY
+          echo "4. **Ejecuta** la aplicación" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Método 2: Desde Actions" >> $GITHUB_STEP_SUMMARY
+          echo "1. Ve a [GitHub Actions](https://github.com/${{ github.repository }}/actions)" >> $GITHUB_STEP_SUMMARY
+          echo "2. Selecciona este workflow run" >> $GITHUB_STEP_SUMMARY
+          echo "3. Descarga el artifact deseado" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🚀 Próximos Pasos" >> $GITHUB_STEP_SUMMARY
+          echo "- **Probar la aplicación** con los nuevos cambios" >> $GITHUB_STEP_SUMMARY
+          echo "- **Reportar issues** si encuentras problemas" >> $GITHUB_STEP_SUMMARY
+          echo "- **Compartir el enlace** con el equipo" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📚 Recursos Útiles" >> $GITHUB_STEP_SUMMARY
+          echo "- [📖 Guía de Usuario](https://github.com/${{ github.repository }}/blob/main/GUIA_USUARIO.md)" >> $GITHUB_STEP_SUMMARY
+          echo "- [🔧 Documentación Técnica](https://github.com/${{ github.repository }}/blob/main/DOCUMENTACION_TECNICA.md)" >> $GITHUB_STEP_SUMMARY
+          echo "- [📦 Guía de Artifacts](https://github.com/${{ github.repository }}/blob/main/GIT_ARTIFACTS_GUIA.md)" >> $GITHUB_STEP_SUMMARY
+          echo "- [🐛 Reportar Issues](https://github.com/${{ github.repository }}/issues)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "**¡Gracias por usar QA Generator!** 🚀" >> $GITHUB_STEP_SUMMARY

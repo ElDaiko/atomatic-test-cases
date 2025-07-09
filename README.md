@@ -1,175 +1,332 @@
 # 🚀 QA Generator
 
-Una aplicación de escritorio ligera para generar casos de prueba automáticamente a partir de historias de usuario.
+<div align="center">
+  <img src="public/icon.svg" alt="QA Generator Logo" width="128" height="128">
+  
+  **Una aplicación de escritorio para generar casos de prueba automáticamente**
+  
+  [![Build Status](https://github.com/tu-usuario/qa-generator/workflows/🚀%20Build%20QA%20Generator%20-%20Multi-Platform/badge.svg)](https://github.com/tu-usuario/qa-generator/actions)
+  [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/tu-usuario/qa-generator/releases)
+  [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+  [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/tu-usuario/qa-generator/releases)
+  [![Downloads](https://img.shields.io/github/downloads/tu-usuario/qa-generator/total.svg)](https://github.com/tu-usuario/qa-generator/releases)
+</div>
+
+## 🎯 Descarga Rápida - Builds Automáticos
+
+<div align="center">
+
+### 📦 Última Versión Disponible
+
+| Plataforma     | Descarga Directa                                                                                                                                                   | Estado                                                                                                                                                                                              |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🖥️ **Windows** | [![Download Windows](https://img.shields.io/badge/Download-Windows-blue.svg?logo=windows)](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml) | [![Windows Build](https://github.com/tu-usuario/qa-generator/workflows/🚀%20Build%20QA%20Generator%20-%20Multi-Platform/badge.svg?branch=main)](https://github.com/tu-usuario/qa-generator/actions) |
+| 🍎 **macOS**   | [![Download macOS](https://img.shields.io/badge/Download-macOS-black.svg?logo=apple)](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml)      | [![macOS Build](https://github.com/tu-usuario/qa-generator/workflows/🚀%20Build%20QA%20Generator%20-%20Multi-Platform/badge.svg?branch=main)](https://github.com/tu-usuario/qa-generator/actions)   |
+| 🐧 **Linux**   | [![Download Linux](https://img.shields.io/badge/Download-Linux-orange.svg?logo=linux)](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml)     | [![Linux Build](https://github.com/tu-usuario/qa-generator/workflows/🚀%20Build%20QA%20Generator%20-%20Multi-Platform/badge.svg?branch=main)](https://github.com/tu-usuario/qa-generator/actions)   |
+
+### 🚀 Acceso Inmediato a Builds
+
+> **💡 Tip**: Cada push a `main` genera automáticamente nuevos executables. ¡Siempre tienes la última versión disponible!
+
+**📥 Cómo descargar:**
+
+1. Haz clic en el botón de descarga de tu plataforma arriba
+2. Ve a la sección "Artifacts" en la página de Actions
+3. Descarga el archivo correspondiente a tu sistema operativo
+4. ¡Listo! Ejecuta y usa la aplicación
+
+[🔗 **Ver todos los builds disponibles**](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml)
+
+</div>
+
+---
 
 ## ✨ Características
 
-- 🤖 **Generación automática** de casos de prueba
-- 📁 **Exportación múltiple**: TXT, CSV, XML, JSON
-- 🔗 **Integración Azure DevOps**
-- 🌙 **Modo oscuro** por defecto
-- 🖥️ **Multiplataforma**: Windows, macOS, Linux
-- 📦 **Aplicación optimizada** - Solo 50MB aproximadamente
+- 🤖 **Generación automática** de casos de prueba a partir de historias de usuario
+- � **Formato Gherkin** para casos de prueba estructurados
+- 📄 **Múltiples formatos** de exportación (TXT, CSV, XML, JSON)
+- 🔗 **Integración Azure DevOps** para work items automáticos
+- � **Interfaz moderna** y fácil de usar
+- ⚡ **Rendimiento optimizado** con Electron + React + TypeScript
+- 🖥️ **Multiplataforma** - Windows, macOS, Linux
 
-## 🚀 Uso Rápido
+## 🎯 ¿Para quién es?
 
-### Windows
+- **QA Engineers** que quieren automatizar la creación de casos de prueba
+- **Product Owners** que necesitan documentar criterios de aceptación
+- **Equipos Ágiles** que buscan optimizar su proceso de testing
+- **Desarrolladores** que quieren mejorar la calidad de sus entregas
 
-1. Descomprimir el archivo ZIP
-2. Ejecutar `Iniciar_QA_Generator.bat`
-3. ¡Listo!
+## 🚀 Inicio Rápido
 
-### Desarrollo
+### 📥 Descarga Rápida (Recomendado)
+
+1. Ve a [Releases](https://github.com/tu-usuario/qa-generator/releases)
+2. Descarga la última versión para tu sistema operativo
+3. Extrae el archivo ZIP
+4. Ejecuta `Iniciar_QA_Generator.bat` (Windows)
+
+### 🛠️ Desarrollo Local
 
 ```bash
+# Clonar el repositorio
+git clone https://github.com/tu-usuario/qa-generator.git
+cd qa-generator
+
+# Instalar dependencias
 npm install
-npm run dev
-```
 
-### Build
+# Ejecutar en modo desarrollo
+npm run electron-dev
 
-```bash
+# Generar ejecutable
 npm run dist
 ```
 
-## 📝 Funcionalidades
+## 📖 Cómo usar
 
-1. **Ingresa una historia de usuario**
-2. **Agrega criterios de aceptación**
-3. **Genera casos de prueba automáticamente**
-4. **Exporta en múltiples formatos**
-5. **Integra con Azure DevOps**
+### 1. 📝 Crear Historia de Usuario
 
-## 🛠️ Tecnologías
-
-- React + TypeScript
-- Electron (optimizado)
-- Vite
-- Atomic Design
-
-## 📄 Licencia
-
-MIT License
-
-```bash
-npm install
+```
+Como usuario, quiero poder iniciar sesión en el sistema
+para acceder a mi cuenta personal
 ```
 
-### Comandos disponibles
+### 2. ✅ Agregar Criterios de Aceptación
 
-#### Desarrollo
-
-```bash
-npm run dev              # Servidor de desarrollo (web)
-npm run electron-dev     # Desarrollo con Electron
+```
+- El usuario debe poder ingresar email y contraseña
+- El sistema debe validar las credenciales
+- El usuario debe ser redirigido al dashboard
+- Se debe mostrar un mensaje de error si las credenciales son incorrectas
 ```
 
-#### Construcción
+### 3. 🎯 Generar Casos de Prueba
 
-```bash
-npm run build           # Construir aplicación web
-npm run electron-build  # Construir y ejecutar Electron
+La aplicación generará automáticamente casos como:
+
+```gherkin
+Scenario: Validación de credenciales correctas
+  Given que el usuario está en la página de login
+  When el usuario ingresa credenciales válidas
+  Then el sistema debe autenticar al usuario
+  And el usuario debe ser redirigido al dashboard
 ```
 
-#### Generación de ejecutables
+### 4. 📤 Exportar Resultados
 
-```bash
-npm run dist-win        # Ejecutable Windows (.exe)
-npm run dist-mac        # Ejecutable macOS (.dmg)
-npm run dist-linux      # Ejecutable Linux (.AppImage)
+- **TXT**: Texto plano para documentación
+- **CSV**: Para importar en Excel o herramientas de gestión
+- **XML**: Formato estructurado para sistemas
+- **JSON**: Para APIs y desarrollo
+- **Azure DevOps**: Integración directa con work items
+
+## 🔧 Configuración Azure DevOps
+
+Para usar la integración con Azure DevOps:
+
+1. Clic en **"Configurar Azure DevOps"**
+2. Completa los campos:
+   - **Organización**: `tu-organizacion`
+   - **Proyecto**: `tu-proyecto`
+   - **Personal Access Token**: Tu PAT con permisos de Work Items
+3. Haz clic en **"Exportar a Azure DevOps"**
+
+## 🏗️ Arquitectura del Proyecto
+
+```
+qa-generator/
+├── 📁 src/                    # Código fuente React
+│   ├── 📁 components/         # Componentes UI
+│   ├── 📁 utils/             # Lógica de negocio
+│   └── 📁 types/             # Tipos TypeScript
+├── 📁 dist-electron/         # Builds de Electron
+├── 📄 main.js               # Proceso principal Electron
+├── 📄 package.json          # Configuración del proyecto
+└── 📄 vite.config.ts        # Configuración Vite
 ```
 
-## 📦 Ejecutables multiplataforma
+### Stack Tecnológico
 
-### GitHub Actions (Automático)
-
-Los ejecutables se generan automáticamente para todas las plataformas cuando haces push a `main`:
-
-1. **Windows**: `Generador de Casos de Prueba QA-1.0-portable.exe`
-2. **macOS**: `Generador de Casos de Prueba QA-1.0-mac.dmg`
-3. **Linux**: `Generador de Casos de Prueba QA-1.0-linux.AppImage`
-
-### Descargar ejecutables
-
-Ve a la pestaña **Actions** en GitHub y descarga los artifacts.
-
-## 🏗️ Arquitectura
-
-El proyecto usa **Atomic Design**:
-
-- `atoms/`: Componentes básicos (Button, Input, Header)
-- `molecules/`: Combinaciones de atoms (CriteriaList, TestCaseCard)
-- `organisms/`: Componentes complejos (UserStoryForm, TestCasesList)
-- `templates/`: Layouts de página (MainTemplate)
-
-## 🔧 Tecnologías
-
-- **Frontend**: React 19 + TypeScript + Vite
+- **Frontend**: React 19 + TypeScript
 - **Desktop**: Electron 37
+- **Build**: Vite 7 + Electron Builder
 - **Styling**: CSS Modules
-- **Build**: electron-builder
-- **CI/CD**: GitHub Actions
+- **Testing**: Formato Gherkin
 
-## 📱 Uso
+## 📦 Scripts Disponibles
 
-### Interfaz web
+```bash
+# Desarrollo
+npm run dev                 # Servidor de desarrollo
+npm run electron-dev        # Desarrollo con Electron
 
-1. `npm run dev`
-2. Abrir http://localhost:5173
+# Producción
+npm run build              # Build de React
+npm run dist               # Generar ejecutable optimizado
+npm run dist-win           # Build para Windows
+npm run dist-mac           # Build para macOS
+npm run dist-linux         # Build para Linux
 
-### Aplicación de escritorio
+# Utilidades
+npm run clean              # Limpiar cache
+npm run lint               # Linting de código
+npm run preview            # Preview del build
+```
 
-1. `npm run electron-dev`
-2. Se abre ventana nativa
+## 🔄 CI/CD con GitHub Actions
 
-### Generar casos de prueba
+El proyecto incluye automatización completa con GitHub Actions:
 
-1. Introducir historia de usuario
-2. Hacer clic en "Generar Casos de Prueba"
-3. Exportar en formato deseado
+- ✅ **Build automático** en cada push
+- ✅ **Artifacts generados** para descarga inmediata
+- ✅ **Releases automáticos** con tags
+- ✅ **Múltiples plataformas** soportadas
 
-## 🔗 Integración Azure DevOps
+Ver [GIT_ARTIFACTS_GUIA.md](GIT_ARTIFACTS_GUIA.md) para más detalles.
 
-Para conectar con Azure DevOps:
+## 📦 Artifacts y Distribución Automática
 
-1. Clic en "Configurar Azure DevOps"
-2. Completar:
-   - Organización
-   - Proyecto
-   - Personal Access Token (PAT)
-3. Guardar configuración
+### 🎯 ¿Qué son los Artifacts?
 
-## 🚀 Distribución
+Los **Artifacts** son los archivos ejecutables que se generan automáticamente cada vez que se hace un push al repositorio. Esto significa que **siempre tienes acceso a la última versión** sin esperar releases oficiales.
 
-### Paquetes optimizados
+### 📥 Cómo Acceder a los Artifacts
 
-- `npm run build` → Crear paquete optimizado
-- Scripts automáticos en `/scripts/`
+#### Método 1: Acceso Directo
 
-### Tamaños aproximados
+1. Ve a [GitHub Actions](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml)
+2. Haz clic en el **último workflow exitoso** (con ✅)
+3. Scroll hacia abajo hasta la sección **"Artifacts"**
+4. Descarga el archivo para tu plataforma:
+   - `QA-Generator-Windows-build-XXX`
+   - `QA-Generator-macOS-build-XXX`
+   - `QA-Generator-Linux-build-XXX`
 
-- **Windows**: ~200MB
-- **macOS**: ~200MB
-- **Linux**: ~200MB
+#### Método 2: Enlaces Directos
 
-## 📄 Licencia
+- **Windows**: [🔗 Último build Windows](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml?query=branch%3Amain+is%3Asuccess)
+- **macOS**: [🔗 Último build macOS](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml?query=branch%3Amain+is%3Asuccess)
+- **Linux**: [🔗 Último build Linux](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml?query=branch%3Amain+is%3Asuccess)
 
-Este proyecto es privado y pertenece a Miguel Roldan.
+### 🚀 Ventajas de los Artifacts
 
-## 👥 Contribución
+| Ventaja           | Descripción                              |
+| ----------------- | ---------------------------------------- |
+| **🔄 Automático** | Cada push genera nuevos executables      |
+| **⚡ Inmediato**  | Disponible 5-10 minutos después del push |
+| **🎯 Específico** | Vinculado a commits específicos          |
+| **📊 Trazable**   | Historial completo de builds             |
+| **🔒 Seguro**     | Solo usuarios con acceso al repo         |
+
+### 📋 Información de Builds
+
+Cada artifact incluye:
+
+- **Executable** principal para la plataforma
+- **GUIA_USUARIO.md** con instrucciones
+- **VERSION.txt** con información del build:
+  - Número de build
+  - Commit SHA
+  - Fecha de construcción
+  - Plataforma objetivo
+
+### 🕐 Retención de Artifacts
+
+- **Tiempo de vida**: 30 días
+- **Límite de storage**: Configurable en GitHub
+- **Limpieza automática**: Los artifacts antiguos se eliminan automáticamente
+
+### 🎪 Ejemplo de Uso
+
+```bash
+# Scenario: Desarrollador hizo un fix
+git commit -m "Fix: Corregir exportación CSV"
+git push origin main
+
+# 5 minutos después...
+# ✅ Nuevo artifact disponible con el fix
+# 📥 QA puede descargar y probar inmediatamente
+```
+
+## 📊 Características Técnicas
+
+### Generación de Casos de Prueba
+
+- **Algoritmo de NLP básico** para análisis de texto
+- **Patrones de detección** para diferentes tipos de criterios
+- **Generación automática** de pasos Gherkin
+- **Casos de prueba comunes** incluidos automáticamente
+
+### Optimizaciones
+
+- **Compresión máxima** en builds
+- **Lazy loading** de componentes
+- **Tree shaking** para bundle mínimo
+- **Portable executable** sin instalación
+
+## 🤝 Contribuir
+
+¡Las contribuciones son bienvenidas!
 
 1. Fork el proyecto
-2. Crear rama feature (`git checkout -b feature/amazing-feature`)
-3. Commit cambios (`git commit -m 'Add amazing feature'`)
-4. Push a la rama (`git push origin feature/amazing-feature`)
-5. Abrir Pull Request
+2. Crea una feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit tus cambios (`git commit -m 'Add amazing feature'`)
+4. Push a la branch (`git push origin feature/amazing-feature`)
+5. Abre un Pull Request
 
-## 🆘 Soporte
+## 📋 Roadmap
 
-Para problemas o preguntas, contactar al equipo de desarrollo.
+- [ ] **v1.1**: Integración con Jira
+- [ ] **v1.2**: Plantillas personalizables
+- [ ] **v1.3**: Exportación a TestRail
+- [ ] **v1.4**: Integración con Confluence
+- [ ] **v1.5**: API REST para integración
+
+## 🐛 Reportar Problemas
+
+Si encuentras algún problema:
+
+1. Verifica que no esté ya reportado en [Issues](https://github.com/tu-usuario/qa-generator/issues)
+2. Crea un nuevo issue con:
+   - Descripción clara del problema
+   - Pasos para reproducir
+   - Capturas de pantalla si es necesario
+   - Información del sistema (OS, versión, etc.)
+
+## 📚 Documentación
+
+- 📖 [Guía de Usuario](GUIA_USUARIO.md) - Instrucciones de uso
+- 🔧 [Documentación Técnica](DOCUMENTACION_TECNICA.md) - Detalles de implementación
+- 📦 [Git Artifacts Guide](GIT_ARTIFACTS_GUIA.md) - CI/CD y automatización
+- 🎯 [Guía de Artifacts](ARTIFACTS_GUIA.md) - **Cómo descargar y usar artifacts**
+
+## 🏆 Créditos
+
+- **Autor**: Miguel Roldan
+- **Organización**: Pragma
+- **Año**: 2025
+
+## 📜 Licencia
+
+Este proyecto está bajo la licencia MIT. Ver [LICENSE](LICENSE) para más detalles.
+
+---
+
+<div align="center">
+  
+  **¿Te gusta el proyecto? ¡Dale una ⭐!**
+  
+  [🐛 Reportar Bug](https://github.com/tu-usuario/qa-generator/issues) · 
+  [✨ Solicitar Feature](https://github.com/tu-usuario/qa-generator/issues) · 
+  [📖 Documentación](https://github.com/tu-usuario/qa-generator/wiki) ·
+  [📦 Descargar Artifacts](https://github.com/tu-usuario/qa-generator/actions/workflows/build.yml)
+  
+</div>
 
 ---
 
 **Versión**: 1.0.0  
-**Desarrollador**: Miguel Roldan  
+**Desarrollado por**: Miguel Roldan - Pragma  
 **Fecha**: Julio 2025
