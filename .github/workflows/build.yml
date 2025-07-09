@@ -194,6 +194,7 @@ jobs:
 
       - name: 🎉 Build Summary
         if: always()
+        shell: bash
         run: |
           if [ "${{ steps.electron-build.outcome }}" = "failure" ]; then
             echo "## ❌ ${{ matrix.platform }} Build Failed!" >> $GITHUB_STEP_SUMMARY
