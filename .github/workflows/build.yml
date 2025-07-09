@@ -107,82 +107,80 @@ jobs:
       - name: 📦 Create Release Package (${{ matrix.platform }})
         shell: bash
         run: |
-          mkdir -p QA_Generator_${{ matrix.platform }}
+          # Create directory with the final name format
+          if [ "${{ matrix.platform }}" = "Windows" ]; then
+            mkdir -p "Windows-qa-automatization"
+            TARGET_DIR="Windows-qa-automatization"
+          elif [ "${{ matrix.platform }}" = "macOS" ]; then
+            mkdir -p "macOS-qa-automatization"
+            TARGET_DIR="macOS-qa-automatization"
+          else
+            mkdir -p "Linux-qa-automatization"
+            TARGET_DIR="Linux-qa-automatization"
+          fi
 
           # Check if the build was successful
           if [ "${{ steps.electron-build.outcome }}" = "failure" ]; then
             echo "❌ Electron build failed for ${{ matrix.platform }}"
-            echo "Build failed for ${{ matrix.platform }}. Please check the build logs for details." > "QA_Generator_${{ matrix.platform }}/BUILD_FAILED.txt"
-            echo "🔄 For troubleshooting, visit: https://github.com/${{ github.repository }}/issues" >> "QA_Generator_${{ matrix.platform }}/BUILD_FAILED.txt"
-            cp "GUIA_USUARIO.md" "QA_Generator_${{ matrix.platform }}/" || echo "Could not copy GUIA_USUARIO.md"
+            echo "Build failed for ${{ matrix.platform }}. Please check the build logs for details." > "$TARGET_DIR/BUILD_FAILED.txt"
+            echo "🔄 For troubleshooting, visit: https://github.com/${{ github.repository }}/issues" >> "$TARGET_DIR/BUILD_FAILED.txt"
+            cp "GUIA_USUARIO.md" "$TARGET_DIR/" || echo "Could not copy GUIA_USUARIO.md"
           else
             # Normal build process - copy main executable with flexible filename matching
             if [ "${{ matrix.platform }}" = "Windows" ]; then
               if [ -f "dist-electron/QA Generator-1.0.0.exe" ]; then
-                cp "dist-electron/QA Generator-1.0.0.exe" "QA_Generator_${{ matrix.platform }}/"
+                cp "dist-electron/QA Generator-1.0.0.exe" "$TARGET_DIR/"
               else
                 # Try to find any .exe file in dist-electron
-                find dist-electron -name "*.exe" -exec cp {} "QA_Generator_${{ matrix.platform }}/" \;
+                find dist-electron -name "*.exe" -exec cp {} "$TARGET_DIR/" \;
               fi
-              cp "GUIA_USUARIO.md" "QA_Generator_${{ matrix.platform }}/"
-              cp "Iniciar_QA_Generator.bat" "QA_Generator_${{ matrix.platform }}/"
+              cp "GUIA_USUARIO.md" "$TARGET_DIR/"
+              cp "Iniciar_QA_Generator.bat" "$TARGET_DIR/"
             elif [ "${{ matrix.platform }}" = "macOS" ]; then
               if [ -f "dist-electron/QA Generator-1.0.0.dmg" ]; then
-                cp "dist-electron/QA Generator-1.0.0.dmg" "QA_Generator_${{ matrix.platform }}/"
+                cp "dist-electron/QA Generator-1.0.0.dmg" "$TARGET_DIR/"
               else
                 # Try to find any .dmg file in dist-electron
-                find dist-electron -name "*.dmg" -exec cp {} "QA_Generator_${{ matrix.platform }}/" \;
+                find dist-electron -name "*.dmg" -exec cp {} "$TARGET_DIR/" \;
               fi
-              cp "GUIA_USUARIO.md" "QA_Generator_${{ matrix.platform }}/"
+              cp "GUIA_USUARIO.md" "$TARGET_DIR/"
             else
               # Linux - more flexible AppImage detection
               if [ -f "dist-electron/QA Generator-1.0.0.AppImage" ]; then
-                cp "dist-electron/QA Generator-1.0.0.AppImage" "QA_Generator_${{ matrix.platform }}/"
+                cp "dist-electron/QA Generator-1.0.0.AppImage" "$TARGET_DIR/"
               elif [ -f "dist-electron/QA Generator-1.0.0-linux.AppImage" ]; then
-                cp "dist-electron/QA Generator-1.0.0-linux.AppImage" "QA_Generator_${{ matrix.platform }}/"
+                cp "dist-electron/QA Generator-1.0.0-linux.AppImage" "$TARGET_DIR/"
               else
                 # Try to find any AppImage file in dist-electron
                 APPIMAGE_FILE=$(find dist-electron -name "*.AppImage" | head -1)
                 if [ -n "$APPIMAGE_FILE" ]; then
-                  cp "$APPIMAGE_FILE" "QA_Generator_${{ matrix.platform }}/"
+                  cp "$APPIMAGE_FILE" "$TARGET_DIR/"
                   echo "✅ Found and copied AppImage: $APPIMAGE_FILE"
                 else
                   echo "❌ No AppImage file found in dist-electron"
                   echo "📁 Available files:"
                   ls -la dist-electron/ || echo "No dist-electron directory"
                   # Create a placeholder file to prevent workflow failure
-                  echo "AppImage build failed. Please check the build logs." > "QA_Generator_${{ matrix.platform }}/BUILD_FAILED.txt"
+                  echo "AppImage build failed. Please check the build logs." > "$TARGET_DIR/BUILD_FAILED.txt"
                 fi
               fi
-              cp "GUIA_USUARIO.md" "QA_Generator_${{ matrix.platform }}/"
+              cp "GUIA_USUARIO.md" "$TARGET_DIR/"
             fi
           fi
 
           # Create version info
-          echo "🚀 QA Generator v1.0.0 - ${{ matrix.platform }}" > "QA_Generator_${{ matrix.platform }}/VERSION.txt"
-          echo "📅 Build Date: $(date)" >> "QA_Generator_${{ matrix.platform }}/VERSION.txt"
-          echo "📝 Commit: ${{ github.sha }}" >> "QA_Generator_${{ matrix.platform }}/VERSION.txt"
-          echo "🌿 Branch: ${{ github.ref_name }}" >> "QA_Generator_${{ matrix.platform }}/VERSION.txt"
-          echo "🔢 Build Number: ${{ github.run_number }}" >> "QA_Generator_${{ matrix.platform }}/VERSION.txt"
-          echo "💻 Platform: ${{ matrix.platform }}" >> "QA_Generator_${{ matrix.platform }}/VERSION.txt"
+          echo "🚀 QA Generator v1.0.0 - ${{ matrix.platform }}" > "$TARGET_DIR/VERSION.txt"
+          echo "📅 Build Date: $(date)" >> "$TARGET_DIR/VERSION.txt"
+          echo "📝 Commit: ${{ github.sha }}" >> "$TARGET_DIR/VERSION.txt"
+          echo "🌿 Branch: ${{ github.ref_name }}" >> "$TARGET_DIR/VERSION.txt"
+          echo "🔢 Build Number: ${{ github.run_number }}" >> "$TARGET_DIR/VERSION.txt"
+          echo "💻 Platform: ${{ matrix.platform }}" >> "$TARGET_DIR/VERSION.txt"
 
-      - name: 🗜️ Create Compressed Archive
-        shell: bash
-        run: |
-          # Create archive with simplified naming and no nested folders
-          if [ "${{ matrix.platform }}" = "Windows" ]; then
-            powershell Compress-Archive -Path "QA_Generator_${{ matrix.platform }}/*" -DestinationPath "Windows-qa-automatization.zip"
-          elif [ "${{ matrix.platform }}" = "macOS" ]; then
-            tar -czf "macOS-qa-automatization.tar.gz" -C "QA_Generator_${{ matrix.platform }}" .
-          else
-            tar -czf "Linux-qa-automatization.tar.gz" -C "QA_Generator_${{ matrix.platform }}" .
-          fi
-
-      - name: 📤 Upload Platform Artifacts
+      - name:  Upload Platform Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact_name }}-${{ github.run_number }}
-          path: ${{ matrix.platform }}-qa-automatization.*
+          name: ${{ matrix.platform }}-qa-automatization
+          path: ${{ matrix.platform }}-qa-automatization/
           retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
           if-no-files-found: warn
 
@@ -193,7 +191,7 @@ jobs:
           if [ "${{ steps.electron-build.outcome }}" = "failure" ]; then
             echo "## ❌ ${{ matrix.platform }} Build Failed!" >> $GITHUB_STEP_SUMMARY
             echo "- 🚨 **Status**: Build failed for ${{ matrix.platform }}" >> $GITHUB_STEP_SUMMARY
-            echo "- 📦 **Artifact**: ${{ matrix.artifact_name }}-${{ github.run_number }} (contains error info)" >> $GITHUB_STEP_SUMMARY
+            echo "- 📦 **Artifact**: ${{ matrix.platform }}-qa-automatization (contains error info)" >> $GITHUB_STEP_SUMMARY
             echo "- 💻 **Platform**: ${{ matrix.platform }}" >> $GITHUB_STEP_SUMMARY
             echo "- 📅 **Build Date**: $(date)" >> $GITHUB_STEP_SUMMARY
             echo "- 🔢 **Build Number**: ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
@@ -204,14 +202,14 @@ jobs:
             echo "3. Report the issue if this persists" >> $GITHUB_STEP_SUMMARY
           else
             echo "## 🎉 ${{ matrix.platform }} Build Completed!" >> $GITHUB_STEP_SUMMARY
-            echo "- 📦 **Artifact**: ${{ matrix.artifact_name }}-${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+            echo "- 📦 **Artifact**: ${{ matrix.platform }}-qa-automatization" >> $GITHUB_STEP_SUMMARY
             echo "- 💻 **Platform**: ${{ matrix.platform }}" >> $GITHUB_STEP_SUMMARY
             echo "- 📅 **Build Date**: $(date)" >> $GITHUB_STEP_SUMMARY
             echo "- 🔢 **Build Number**: ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "### 📥 Cómo Descargar" >> $GITHUB_STEP_SUMMARY
             echo "1. Scroll hacia abajo hasta **Artifacts**" >> $GITHUB_STEP_SUMMARY
-            echo "2. Haz clic en **${{ matrix.artifact_name }}-${{ github.run_number }}**" >> $GITHUB_STEP_SUMMARY
+            echo "2. Haz clic en **${{ matrix.platform }}-qa-automatization**" >> $GITHUB_STEP_SUMMARY
             echo "3. Descomprime y ejecuta" >> $GITHUB_STEP_SUMMARY
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -245,9 +243,9 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            artifacts/QA-Generator-Windows-*/Windows-qa-automatization.zip
-            artifacts/QA-Generator-macOS-*/macOS-qa-automatization.tar.gz
-            artifacts/QA-Generator-Linux-*/Linux-qa-automatization.tar.gz
+            artifacts/Windows-qa-automatization/**/*
+            artifacts/macOS-qa-automatization/**/*
+            artifacts/Linux-qa-automatization/**/*
           name: 🚀 QA Generator ${{ github.ref_name }}
           body: |
             ## 🚀 QA Generator ${{ github.ref_name }} - Multi-Platform Release
@@ -255,24 +253,27 @@ jobs:
             ### 📦 Descargas Disponibles
 
             #### 🖥️ Windows
-            - **Archivo**: `Windows-qa-automatization.zip`
+            - **Artifact**: `Windows-qa-automatization`
             - **Instalación**: 
-              1. Descomprime el ZIP
-              2. Ejecuta `Iniciar_QA_Generator.bat`
-              3. ¡Listo!
+              1. Descarga el artifact desde GitHub Actions
+              2. Extrae los archivos
+              3. Ejecuta `Iniciar_QA_Generator.bat`
+              4. ¡Listo!
 
             #### 🍎 macOS
-            - **Archivo**: `macOS-qa-automatization.tar.gz`
+            - **Artifact**: `macOS-qa-automatization`
             - **Instalación**:
-              1. Descomprime el archivo
-              2. Ejecuta el archivo .dmg
-              3. Arrastra a Applications
+              1. Descarga el artifact desde GitHub Actions
+              2. Extrae los archivos
+              3. Ejecuta el archivo .dmg
+              4. Arrastra a Applications
 
             #### 🐧 Linux
-            - **Archivo**: `Linux-qa-automatization.tar.gz`
+            - **Artifact**: `Linux-qa-automatization`
             - **Instalación**:
-              1. Descomprime el archivo
-              2. Ejecuta el .AppImage
+              1. Descarga el artifact desde GitHub Actions
+              2. Extrae los archivos
+              3. Ejecuta el .AppImage
               3. O instala según tu distribución
 
             ### ✨ Características
@@ -349,9 +350,9 @@ jobs:
           echo "## 🎯 Available Artifacts" >> $GITHUB_STEP_SUMMARY
           echo "| Platform | Artifact Name |" >> $GITHUB_STEP_SUMMARY
           echo "|----------|---------------|" >> $GITHUB_STEP_SUMMARY
-          echo "| 🖥️ Windows | \`QA-Generator-Windows-${{ github.run_number }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| 🍎 macOS | \`QA-Generator-macOS-${{ github.run_number }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| 🐧 Linux | \`QA-Generator-Linux-${{ github.run_number }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🖥️ Windows | \`Windows-qa-automatization\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🍎 macOS | \`macOS-qa-automatization\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🐧 Linux | \`Linux-qa-automatization\` |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 📥 Instrucciones de Descarga" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY

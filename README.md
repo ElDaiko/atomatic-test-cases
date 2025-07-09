@@ -199,10 +199,10 @@ Los **Artifacts** son los archivos ejecutables que se generan automáticamente c
 1. Ve a [GitHub Actions](https://github.com/ElDaiko/atomatic-test-cases/actions/workflows/build.yml)
 2. Haz clic en el **último workflow exitoso** (con ✅)
 3. Scroll hacia abajo hasta la sección **"Artifacts"**
-4. Descarga el archivo para tu plataforma:
-   - `Windows-qa-automatization.zip`
-   - `macOS-qa-automatization.tar.gz`
-   - `Linux-qa-automatization.tar.gz`
+4. Descarga el artifact para tu plataforma:
+   - `Windows-qa-automatization`
+   - `macOS-qa-automatization`
+   - `Linux-qa-automatization`
 
 #### Método 2: Enlaces Directos
 
