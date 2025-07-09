@@ -3,17 +3,20 @@
 ## 📋 **Requisitos previos**
 
 ### **Para generar ejecutable macOS necesitas:**
+
 - 🍎 **Una Mac** (física o virtual)
 - 🛠️ **Xcode** instalado
 - 📦 **Node.js 18+**
 - 🔧 **npm** o **yarn**
 
 ### **⚠️ Limitación importante:**
+
 **Electron-builder solo puede generar ejecutables macOS desde macOS**. No es posible hacerlo desde Windows.
 
 ## 🚀 **Método 1: Ejecutar en Mac**
 
 ### **1. Clonar el proyecto en Mac:**
+
 ```bash
 git clone <tu-repositorio>
 cd qa-aut
@@ -21,6 +24,7 @@ npm install
 ```
 
 ### **2. Generar ejecutable macOS:**
+
 ```bash
 # Opción A: Script automatizado
 chmod +x build-macos.sh
@@ -31,6 +35,7 @@ npm run dist-mac
 ```
 
 ### **3. Resultado:**
+
 - 📁 **Ubicación**: `dist-electron/`
 - 📦 **Archivo**: `Generador de Casos de Prueba QA-1.0-mac.dmg`
 - 🎯 **Arquitecturas**: Intel (x64) + Apple Silicon (arm64)
@@ -38,6 +43,7 @@ npm run dist-mac
 ## ☁️ **Método 2: GitHub Actions (Recomendado)**
 
 ### **1. Configurar repositorio:**
+
 ```bash
 # Subir código a GitHub
 git add .
@@ -46,26 +52,29 @@ git push origin main
 ```
 
 ### **2. Activar GitHub Actions:**
+
 - Ve a tu repositorio en GitHub
 - Pestaña **Actions**
 - Se ejecutará automáticamente
 
 ### **3. Descargar ejecutables:**
+
 - **Windows**: `windows-executable.zip`
 - **macOS**: `macos-executable.zip`
 - **Linux**: `linux-executable.zip`
 
 ## 📦 **Tipos de ejecutables por plataforma**
 
-| Plataforma | Formato | Tamaño | Instalación |
-|------------|---------|---------|-------------|
-| **Windows** | `.exe` | ~200MB | Portable |
-| **macOS** | `.dmg` | ~200MB | Arrastar a Apps |
-| **Linux** | `.AppImage` | ~200MB | Ejecutable directo |
+| Plataforma  | Formato     | Tamaño | Instalación        |
+| ----------- | ----------- | ------ | ------------------ |
+| **Windows** | `.exe`      | ~200MB | Portable           |
+| **macOS**   | `.dmg`      | ~200MB | Arrastar a Apps    |
+| **Linux**   | `.AppImage` | ~200MB | Ejecutable directo |
 
 ## 🔧 **Configuración actual**
 
 ### **Scripts disponibles:**
+
 ```json
 {
   "dist-win": "npm run build && electron-builder --win",
@@ -75,6 +84,7 @@ git push origin main
 ```
 
 ### **Configuración electron-builder:**
+
 ```json
 {
   "mac": {
@@ -88,15 +98,18 @@ git push origin main
 ## 🛠️ **Alternativas si no tienes Mac**
 
 ### **1. Usar macOS en VM:**
+
 - **VirtualBox** + macOS (legal con hardware Apple)
 - **VMware** + macOS
 
 ### **2. Servicios en la nube:**
+
 - **MacStadium** (alquiler de Mac)
 - **GitHub Actions** (gratis para repositorios públicos)
 - **CircleCI** con macOS
 
 ### **3. Amigo/colega con Mac:**
+
 - Enviar código
 - Ejecutar `npm run dist-mac`
 - Recibir `.dmg`
@@ -104,6 +117,7 @@ git push origin main
 ## 🎯 **Proceso paso a paso en Mac**
 
 ### **1. Preparar entorno:**
+
 ```bash
 # Verificar Node.js
 node --version  # Debe ser 18+
@@ -113,6 +127,7 @@ xcode-select --install
 ```
 
 ### **2. Ejecutar build:**
+
 ```bash
 # Instalar dependencias
 npm install
@@ -125,6 +140,7 @@ npm run dist-mac
 ```
 
 ### **3. Verificar resultado:**
+
 ```bash
 # Ver archivos generados
 ls -la dist-electron/
@@ -136,6 +152,7 @@ ls -la dist-electron/
 ## 🔐 **Firma de código (opcional)**
 
 Para distribución oficial en Mac App Store:
+
 ```bash
 # Certificado de desarrollador Apple
 export CSC_LINK="path/to/certificate.p12"

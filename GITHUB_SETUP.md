@@ -3,6 +3,7 @@
 ## 📋 **Pasos para configurar GitHub Actions:**
 
 ### **1. Crear repositorio en GitHub:**
+
 1. Ve a [github.com](https://github.com) y haz login
 2. Clic en "New repository" (botón verde)
 3. Nombre: `qa-aut` (o el que prefieras)
@@ -12,6 +13,7 @@
 7. Clic en "Create repository"
 
 ### **2. Conectar repositorio local:**
+
 ```bash
 # Agregar origen remoto
 git remote add origin https://github.com/TU-USUARIO/qa-aut.git
@@ -21,12 +23,15 @@ git push -u origin main
 ```
 
 ### **3. Resultado automático:**
+
 Una vez que hagas `git push`, GitHub Actions **automáticamente**:
+
 - ✅ Detectará el archivo `.github/workflows/build.yml`
 - ✅ Ejecutará builds en 3 sistemas operativos
 - ✅ Generará ejecutables para Windows, macOS y Linux
 
 ### **4. Descargar ejecutables:**
+
 1. Ve a tu repositorio en GitHub
 2. Pestaña **"Actions"**
 3. Clic en el build más reciente
@@ -63,6 +68,7 @@ git push -u origin main
 ## 📋 **Archivos generados:**
 
 Los siguientes archivos se crearán automáticamente:
+
 - `Generador de Casos de Prueba QA-1.0-portable.exe` (Windows)
 - `Generador de Casos de Prueba QA-1.0-mac.dmg` (macOS)
 - `Generador de Casos de Prueba QA-1.0-linux.AppImage` (Linux)
