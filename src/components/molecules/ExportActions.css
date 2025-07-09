@@ -1,0 +1,232 @@
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.copy-btn,
+.export-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.copy-btn:hover,
+.export-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+.export-btn {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.export-btn:hover {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+}
+
+/* Azure Export Dropdown */
+.azure-export-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.azure-export-btn {
+    background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.azure-export-btn:hover {
+    background: linear-gradient(135deg, #106ebe 0%, #005a9e 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 120, 212, 0.4);
+}
+
+.azure-export-dropdown:hover .azure-export-options {
+    display: block;
+}
+
+.azure-export-options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    min-width: 200px;
+    animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.azure-option {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: 12px 16px;
+    background: white;
+    border: none;
+    border-bottom: 1px solid #f1f5f9;
+    color: #374151;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.azure-option:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.azure-option:last-child {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom: none;
+}
+
+.azure-option:hover {
+    background: #f8fafc;
+    color: #1e293b;
+}
+
+.azure-option:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.azure-option-separator {
+    height: 1px;
+    background: #e2e8f0;
+    margin: 0;
+}
+
+.azure-option small {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+/* Dark mode styles */
+.dark-mode .copy-btn,
+.dark-mode .export-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.dark-mode .copy-btn:hover,
+.dark-mode .export-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.5);
+}
+
+.dark-mode .export-btn {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+.dark-mode .export-btn:hover {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    box-shadow: 0 6px 16px rgba(245, 158, 11, 0.5);
+}
+
+.dark-mode .azure-export-btn {
+    background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+    box-shadow: 0 4px 12px rgba(0, 120, 212, 0.4);
+}
+
+.dark-mode .azure-export-btn:hover {
+    background: linear-gradient(135deg, #106ebe 0%, #005a9e 100%);
+    box-shadow: 0 6px 16px rgba(0, 120, 212, 0.5);
+}
+
+.dark-mode .azure-export-options {
+    background: #1e293b;
+    border: 1px solid #475569;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .azure-option {
+    background: #334155;
+    color: #f1f5f9;
+    border-bottom: 1px solid #475569;
+}
+
+.dark-mode .azure-option:hover {
+    background: #475569;
+    color: #f1f5f9;
+}
+
+.dark-mode .azure-option-separator {
+    background: #475569;
+}
+
+.dark-mode .azure-option small {
+    color: #cbd5e1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .copy-btn,
+    .export-btn,
+    .azure-export-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .azure-export-dropdown {
+        width: 100%;
+    }
+
+    .azure-export-options {
+        position: static;
+        display: block;
+        box-shadow: none;
+        border: 1px solid #e2e8f0;
+        margin-top: 8px;
+    }
+}

@@ -1,0 +1,129 @@
+/* Test Case Card */
+.test-case-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.test-case-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.test-case-header {
+    background: #f8fafc;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.test-case-header h3 {
+    color: #1e293b;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.test-case-type {
+    background: #3b82f6;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.test-case-content {
+    padding: 20px;
+}
+
+.test-case-content>div {
+    margin-bottom: 16px;
+}
+
+.test-case-content>div:last-child {
+    margin-bottom: 0;
+}
+
+.test-case-content strong {
+    color: #374151;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.test-case-content p {
+    color: #6b7280;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.gherkin-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.gherkin-step {
+    background: #f1f5f9;
+    padding: 10px 12px;
+    border-left: 3px solid #3b82f6;
+    border-radius: 0 6px 6px 0;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9rem;
+    color: #374151;
+    transition: background-color 0.2s ease;
+}
+
+.gherkin-step:hover {
+    background: #e2e8f0;
+}
+
+/* Dark mode styles */
+.dark-mode .test-case-card {
+    background: #1e293b;
+    border: 1px solid #475569;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .test-case-card:hover {
+    box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .test-case-header {
+    background: #334155;
+    border-bottom: 1px solid #475569;
+}
+
+.dark-mode .test-case-header h3 {
+    color: #f1f5f9;
+}
+
+.dark-mode .test-case-type {
+    background: #6366f1;
+    color: white;
+}
+
+.dark-mode .test-case-content strong {
+    color: #f1f5f9;
+}
+
+.dark-mode .test-case-content p {
+    color: #e2e8f0;
+}
+
+.dark-mode .gherkin-step {
+    background: #334155;
+    border-left: 3px solid #6366f1;
+    color: #f1f5f9;
+}
+
+.dark-mode .gherkin-step:hover {
+    background: #475569;
+}
