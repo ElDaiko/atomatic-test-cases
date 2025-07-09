@@ -16,8 +16,7 @@ function createWindow() {
       enableRemoteModule: false,
       webSecurity: true,
     },
-    // icon: path.join(__dirname, 'public/vite.svg'),
-    title: "Generador de Casos de Prueba QA",
+    title: "QA Generator",
     show: false,
     titleBarStyle: "default",
   });

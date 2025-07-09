@@ -1,6 +1,6 @@
-# 🚀 Generador de Casos de Prueba QA
+# 🚀 QA Generator
 
-Una aplicación de escritorio para generar casos de prueba automáticamente a partir de historias de usuario.
+Una aplicación de escritorio ligera para generar casos de prueba automáticamente a partir de historias de usuario.
 
 ## ✨ Características
 
@@ -9,15 +9,48 @@ Una aplicación de escritorio para generar casos de prueba automáticamente a pa
 - 🔗 **Integración Azure DevOps**
 - 🌙 **Modo oscuro** por defecto
 - 🖥️ **Multiplataforma**: Windows, macOS, Linux
-- 📦 **Aplicación portable** - No requiere instalación
+- 📦 **Aplicación optimizada** - Solo 50MB aproximadamente
 
-## 🛠️ Desarrollo
+## 🚀 Uso Rápido
 
-### Requisitos previos
-- Node.js 18+
-- npm o yarn
+### Windows
 
-### Instalación
+1. Descomprimir el archivo ZIP
+2. Ejecutar `Iniciar_QA_Generator.bat`
+3. ¡Listo!
+
+### Desarrollo
+
+```bash
+npm install
+npm run dev
+```
+
+### Build
+
+```bash
+npm run dist
+```
+
+## 📝 Funcionalidades
+
+1. **Ingresa una historia de usuario**
+2. **Agrega criterios de aceptación**
+3. **Genera casos de prueba automáticamente**
+4. **Exporta en múltiples formatos**
+5. **Integra con Azure DevOps**
+
+## 🛠️ Tecnologías
+
+- React + TypeScript
+- Electron (optimizado)
+- Vite
+- Atomic Design
+
+## 📄 Licencia
+
+MIT License
+
 ```bash
 npm install
 ```
@@ -25,18 +58,21 @@ npm install
 ### Comandos disponibles
 
 #### Desarrollo
+
 ```bash
 npm run dev              # Servidor de desarrollo (web)
 npm run electron-dev     # Desarrollo con Electron
 ```
 
 #### Construcción
+
 ```bash
 npm run build           # Construir aplicación web
 npm run electron-build  # Construir y ejecutar Electron
 ```
 
 #### Generación de ejecutables
+
 ```bash
 npm run dist-win        # Ejecutable Windows (.exe)
 npm run dist-mac        # Ejecutable macOS (.dmg)
@@ -46,6 +82,7 @@ npm run dist-linux      # Ejecutable Linux (.AppImage)
 ## 📦 Ejecutables multiplataforma
 
 ### GitHub Actions (Automático)
+
 Los ejecutables se generan automáticamente para todas las plataformas cuando haces push a `main`:
 
 1. **Windows**: `Generador de Casos de Prueba QA-1.0-portable.exe`
@@ -53,11 +90,13 @@ Los ejecutables se generan automáticamente para todas las plataformas cuando ha
 3. **Linux**: `Generador de Casos de Prueba QA-1.0-linux.AppImage`
 
 ### Descargar ejecutables
+
 Ve a la pestaña **Actions** en GitHub y descarga los artifacts.
 
 ## 🏗️ Arquitectura
 
 El proyecto usa **Atomic Design**:
+
 - `atoms/`: Componentes básicos (Button, Input, Header)
 - `molecules/`: Combinaciones de atoms (CriteriaList, TestCaseCard)
 - `organisms/`: Componentes complejos (UserStoryForm, TestCasesList)
@@ -74,14 +113,17 @@ El proyecto usa **Atomic Design**:
 ## 📱 Uso
 
 ### Interfaz web
+
 1. `npm run dev`
 2. Abrir http://localhost:5173
 
 ### Aplicación de escritorio
+
 1. `npm run electron-dev`
 2. Se abre ventana nativa
 
 ### Generar casos de prueba
+
 1. Introducir historia de usuario
 2. Hacer clic en "Generar Casos de Prueba"
 3. Exportar en formato deseado
@@ -89,6 +131,7 @@ El proyecto usa **Atomic Design**:
 ## 🔗 Integración Azure DevOps
 
 Para conectar con Azure DevOps:
+
 1. Clic en "Configurar Azure DevOps"
 2. Completar:
    - Organización
@@ -99,12 +142,14 @@ Para conectar con Azure DevOps:
 ## 🚀 Distribución
 
 ### Paquetes optimizados
+
 - `npm run build` → Crear paquete optimizado
 - Scripts automáticos en `/scripts/`
 
 ### Tamaños aproximados
+
 - **Windows**: ~200MB
-- **macOS**: ~200MB  
+- **macOS**: ~200MB
 - **Linux**: ~200MB
 
 ## 📄 Licencia

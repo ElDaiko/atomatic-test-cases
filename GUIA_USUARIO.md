@@ -1,33 +1,68 @@
-# 🚀 Generador de Casos de Prueba QA
+# 🚀 QA Generator - Guía de Usuario
 
-## 📋 Instrucciones para el equipo de QA
+## ⚡ Inicio Rápido
 
-### ⚡ Inicio rápido
+1. **Descomprimir** el archivo ZIP
+2. **Doble clic** en `Iniciar_QA_Generator.bat`
+3. **¡Listo!** La aplicación se abre automáticamente
 
-1. **Descomprimir** este archivo en cualquier carpeta
-2. **Doble clic** en `🚀 Iniciar_QA_Generator.bat`
-3. **¡Listo!** La aplicación se abrirá automáticamente
+## 📁 Contenido
 
-### 📁 Contenido del paquete
+- `Iniciar_QA_Generator.bat` - Ejecutar aplicación
+- `QA Generator.exe` - Aplicación principal
+- `GUIA_USUARIO.md` - Esta guía
 
-- `🚀 Iniciar_QA_Generator.bat` - Ejecutar para iniciar la aplicación
-- `dist-electron/` - Carpeta con el ejecutable y archivos necesarios
-- `GUIA_USUARIO.md` - Este archivo de instrucciones
+## 💡 Cómo Usar
 
-### 💡 Funcionalidades principales
+### 1. Crear Historia de Usuario
 
-#### ✅ Generación de casos de prueba
+- Ingresa la descripción de tu historia de usuario
+- Ejemplo: "Como usuario quiero poder hacer login"
 
-1. **Ingresa una historia de usuario** en el campo de texto
-2. **Selecciona los criterios** que deseas incluir
-3. **Haz clic en "Generar Casos de Prueba"**
-4. Los casos se generarán automáticamente
+### 2. Agregar Criterios de Aceptación
 
-#### 📄 Exportación de resultados
+- Cada línea es un criterio
+- Ejemplo:
+  ```
+  El usuario debe poder ingresar email y contraseña
+  El sistema debe validar las credenciales
+  El usuario debe ser redirigido al dashboard
+  ```
 
-- **TXT** - Archivo de texto plano
-- **CSV** - Para Excel o Google Sheets
-- **XML** - Formato estructurado
+### 3. Generar Casos de Prueba
+
+- Clic en "Generar Casos de Prueba"
+- Se crearán automáticamente en formato Gherkin
+
+### 4. Exportar Resultados
+
+- **TXT**: Archivo de texto plano
+- **CSV**: Para Excel
+- **XML**: Formato estructurado
+- **JSON**: Para APIs
+- **Azure DevOps**: Integración directa
+
+## 🔧 Configuración Azure DevOps
+
+Para usar la integración:
+
+1. Clic en "Configurar Azure DevOps"
+2. Ingresa:
+
+   - **Organización**: tu-organizacion
+   - **Proyecto**: tu-proyecto
+   - **Token**: Personal Access Token
+
+3. Clic en "Exportar a Azure DevOps"
+
+## ❓ Soporte
+
+Para dudas o problemas, contacta al equipo de desarrollo.
+
+---
+
+_QA Generator v1.0 - Optimizado para máximo rendimiento_
+
 - **JSON** - Para desarrolladores
 - **Azure DevOps** - Integración directa (requiere configuración)
 

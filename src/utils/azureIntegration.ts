@@ -32,7 +32,7 @@ export interface AzureCreateResult {
   testCaseTitle?: string;
 }
 
-// Función para convertir casos de prueba al formato de Azure DevOps
+// Convertir casos de prueba al formato Azure DevOps
 export const convertToAzureFormat = (
   testCases: TestCase[]
 ): AzureTestCase[] => {
@@ -45,6 +45,7 @@ export const convertToAzureFormat = (
   }));
 };
 
+// Convertir pasos Gherkin a pasos Azure
 const convertGherkinToAzureSteps = (
   gherkinSteps: string[]
 ): AzureTestStep[] => {

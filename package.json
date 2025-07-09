@@ -1,6 +1,6 @@
 {
   "name": "qa-aut",
-  "productName": "Generador de Casos de Prueba QA",
+  "productName": "QA Generator",
   "description": "Una aplicación para generar casos de prueba automáticamente a partir de historias de usuario",
   "version": "1.0.0",
   "author": "Miguel Roldan",
@@ -15,10 +15,11 @@
     "electron": "electron .",
     "electron-dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && electron .\"",
     "electron-build": "npm run build && electron .",
-    "dist-simple": "npm run build && npx electron-builder --win --x64 --config.compression=store --config.npmRebuild=false --config.buildDependenciesFromSource=false",
+    "dist": "npm run build && electron-builder --win --config.compression=maximum",
     "dist-win": "npm run build && electron-builder --win",
     "dist-mac": "npm run build && electron-builder --mac",
-    "dist-linux": "npm run build && electron-builder --linux"
+    "dist-linux": "npm run build && electron-builder --linux",
+    "clean": "rimraf dist dist-electron electron-cache node_modules/.cache"
   },
   "dependencies": {
     "react": "^19.1.0",
@@ -36,6 +37,8 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "rimraf": "^6.0.1",
+    "terser": "^5.43.1",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
     "vite": "^7.0.3",
@@ -43,7 +46,7 @@
   },
   "build": {
     "appId": "com.qa-aut.test-generator",
-    "productName": "Generador de Casos de Prueba QA",
+    "productName": "QA Generator",
     "forceCodeSigning": false,
     "publish": null,
     "directories": {
@@ -56,7 +59,7 @@
     ],
     "win": {
       "target": "portable",
-      "artifactName": "${productName}-${version}-portable.${ext}",
+      "artifactName": "${productName}-${version}.${ext}",
       "requestedExecutionLevel": "asInvoker",
       "signAndEditExecutable": false,
       "forceCodeSigning": false
@@ -66,8 +69,7 @@
         {
           "target": "dmg",
           "arch": [
-            "x64",
-            "arm64"
+            "x64"
           ]
         }
       ],
@@ -87,14 +89,25 @@
       "category": "Development"
     },
     "portable": {
-      "artifactName": "${productName}-${version}-portable.${ext}"
+      "artifactName": "${productName}-${version}.${ext}"
     },
-    "compression": "store",
+    "compression": "maximum",
     "npmRebuild": false,
     "buildDependenciesFromSource": false,
     "nodeGypRebuild": false,
-    "electronDownload": {
-      "cache": "./electron-cache"
-    }
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "extraResources": [
+      {
+        "from": "locales",
+        "to": "locales",
+        "filter": [
+          "en-US.pak",
+          "es.pak"
+        ]
+      }
+    ]
   }
 }
